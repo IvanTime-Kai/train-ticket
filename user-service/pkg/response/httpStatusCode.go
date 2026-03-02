@@ -1,0 +1,19 @@
+package response
+
+const (
+	ErrCodeSuccess       = 20000
+	ErrCodeParamsInvalid = 40000
+	ErrEmailExists       = 40001
+	ErrInvalidCreds      = 40002
+	ErrUserNotFound      = 40004
+	ErrUnauthorized      = 40003
+)
+
+var msg = map[int]string{
+	ErrCodeSuccess:       "Success",
+	ErrCodeParamsInvalid: "Params invalid",
+	ErrEmailExists:       "Email already exists",
+	ErrInvalidCreds:      "Invalid email or password",
+	ErrUserNotFound:      "User not found",
+	ErrUnauthorized:      "Unauthorized",
+}
