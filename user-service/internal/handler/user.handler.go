@@ -7,57 +7,21 @@ import (
 	"github.com/leminhthai/train-ticket/user-service/pkg/response"
 )
 
+var User = new(UserHandler)
+
 type UserHandler struct {
 	us service.UserService
 }
 
-func NewUserHandler(us service.UserService) *UserHandler {
-	return &UserHandler{
-		us: us,
-	}
-}
-
-func (uh *UserHandler) Login(c *gin.Context) {
-	var req model.LoginRequest
-
-	if err := c.ShouldBindJSON(&req); err != nil {
-		response.ErrorResponse(c, response.ErrCodeParamsInvalid, err.Error())
-		return
-	}
-
-	user, err := uh.us.Login(c.Request.Context(), &req)
-
-	if err != nil {
-		response.ErrorResponse(c, response.ErrCodeParamsInvalid, err.Error())
-		return
-	}
-
-	response.SuccessResponse(c, response.ErrCodeSuccess, user)
-}
-
-func (uh *UserHandler) Register(c *gin.Context) {
-	var req model.RegisterRequest
-
-	if err := c.ShouldBindJSON(c.Request.Context()); err != nil {
-		response.ErrorResponse(c, response.ErrCodeParamsInvalid, err.Error())
-		return
-	}
-
-	user, err := uh.us.Register(c.Request.Context(), &req)
-
-	if err != nil {
-		response.ErrorResponse(c, response.ErrCodeParamsInvalid, err.Error())
-		return
-	}
-
-	response.SuccessResponse(c, response.ErrCodeSuccess, user)
+// InitUser inject UserService cho user (profile). Gọi trong InitServices.
+func InitUser(us service.UserService) {
+	User.us = us
 }
 
 func (uh *UserHandler) GetByID(c *gin.Context) {
 	userID := c.Request.Context().Value("subjectUUID").(string)
 
 	user, err := uh.us.GetByID(c.Request.Context(), userID)
-
 	if err != nil {
 		response.ErrorResponse(c, response.ErrUserNotFound, err.Error())
 		return

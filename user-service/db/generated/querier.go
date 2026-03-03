@@ -9,10 +9,16 @@ import (
 )
 
 type Querier interface {
+	CreateSession(ctx context.Context, arg CreateSessionParams) error
 	CreateUser(ctx context.Context, arg CreateUserParams) error
+	GetSessionsByUserID(ctx context.Context, userID string) ([]UserSession, error)
 	GetUserByEmail(ctx context.Context, email string) (User, error)
 	GetUserByID(ctx context.Context, id string) (User, error)
+	LogoutAllSessions(ctx context.Context, userID string) error
+	UpdateLastLogin(ctx context.Context, id string) error
+	UpdateSessionLogout(ctx context.Context, id string) error
 	UpdateUser(ctx context.Context, arg UpdateUserParams) error
+	VerifyUser(ctx context.Context, id string) error
 }
 
 var _ Querier = (*Queries)(nil)

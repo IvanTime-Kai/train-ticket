@@ -14,6 +14,10 @@ type UserRepository interface {
 	GetByEmail(ctx context.Context, email string) (db.User, error)
 	GetByID(ctx context.Context, id string) (db.User, error)
 	Update(ctx context.Context, id string, req *model.UpdateUserRequest) error
+	UpdateLastLogin(ctx context.Context, id string) error
+	CreateSession(ctx context.Context, userId, device, ipAddress string) error
+	UpdateSessionLogout(ctx context.Context, sessionId string) error
+	LogoutAllSessions(ctx context.Context, userId string) error
 }
 
 type userRepository struct {
@@ -56,4 +60,25 @@ func (r *userRepository) Update(ctx context.Context, id string, req *model.Updat
 		FullName: req.FullName,
 		Phone:    sql.NullString{String: req.Phone, Valid: req.Phone != ""},
 	})
+}
+
+func (r *userRepository) UpdateLastLogin(ctx context.Context, id string) error {
+	return r.queries.UpdateLastLogin(ctx, id)
+}
+
+func (r *userRepository) CreateSession(ctx context.Context, userId, device, ipAddress string) error {
+	return r.queries.CreateSession(ctx, db.CreateSessionParams{
+		ID:        uuid.New().String(),
+		UserID:    userId,
+		Device:    sql.NullString{String: device, Valid: device != ""},
+		IpAddress: sql.NullString{String: ipAddress, Valid: ipAddress != ""},
+	})
+}
+
+func (r *userRepository) UpdateSessionLogout(ctx context.Context, sessionId string) error {
+	return r.queries.UpdateSessionLogout(ctx, sessionId)
+}
+
+func (r *userRepository) LogoutAllSessions(ctx context.Context, userId string) error {
+	return r.queries.LogoutAllSessions(ctx, userId)
 }

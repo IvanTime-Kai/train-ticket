@@ -37,7 +37,7 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) error {
 }
 
 const getUserByEmail = `-- name: GetUserByEmail :one
-SELECT id, email, password, full_name, phone, role, is_active, created_at, updated_at FROM users WHERE email = ? LIMIT 1
+SELECT id, email, password, full_name, phone, role, is_active, created_at, updated_at, is_verified, last_login_at FROM users WHERE email = ? LIMIT 1
 `
 
 func (q *Queries) GetUserByEmail(ctx context.Context, email string) (User, error) {
@@ -53,12 +53,14 @@ func (q *Queries) GetUserByEmail(ctx context.Context, email string) (User, error
 		&i.IsActive,
 		&i.CreatedAt,
 		&i.UpdatedAt,
+		&i.IsVerified,
+		&i.LastLoginAt,
 	)
 	return i, err
 }
 
 const getUserByID = `-- name: GetUserByID :one
-SELECT id, email, password, full_name, phone, role, is_active, created_at, updated_at FROM users WHERE id = ? LIMIT 1
+SELECT id, email, password, full_name, phone, role, is_active, created_at, updated_at, is_verified, last_login_at FROM users WHERE id = ? LIMIT 1
 `
 
 func (q *Queries) GetUserByID(ctx context.Context, id string) (User, error) {
@@ -74,8 +76,21 @@ func (q *Queries) GetUserByID(ctx context.Context, id string) (User, error) {
 		&i.IsActive,
 		&i.CreatedAt,
 		&i.UpdatedAt,
+		&i.IsVerified,
+		&i.LastLoginAt,
 	)
 	return i, err
+}
+
+const updateLastLogin = `-- name: UpdateLastLogin :exec
+UPDATE users
+SET last_login_at = NOW()
+WHERE id = ?
+`
+
+func (q *Queries) UpdateLastLogin(ctx context.Context, id string) error {
+	_, err := q.db.ExecContext(ctx, updateLastLogin, id)
+	return err
 }
 
 const updateUser = `-- name: UpdateUser :exec
@@ -92,5 +107,16 @@ type UpdateUserParams struct {
 
 func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) error {
 	_, err := q.db.ExecContext(ctx, updateUser, arg.FullName, arg.Phone, arg.ID)
+	return err
+}
+
+const verifyUser = `-- name: VerifyUser :exec
+UPDATE users
+SET is_verified = 1
+WHERE id = ?
+`
+
+func (q *Queries) VerifyUser(ctx context.Context, id string) error {
+	_, err := q.db.ExecContext(ctx, verifyUser, id)
 	return err
 }

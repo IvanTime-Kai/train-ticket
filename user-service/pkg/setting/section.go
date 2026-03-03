@@ -5,12 +5,15 @@ type Settings struct {
 	Logger LoggerSetting `mapstructure:"logger"`
 	MySql  MySqlSetting  `mapstructure:"mysql"`
 	Server ServerSetting `mapstructure:"server"`
+	Redis  RedisSetting  `mapstructure:"redis"`
 }
 
 type JWTSetting struct {
 	TOKEN_HOUR_LIFESPAN int    `mapstructure:"TOKEN_HOUR_LIFESPAN"`
 	JWT_EXPIRATION      string `mapstructure:"JWT_EXPIRATION"`
 	API_SECRET          string `mapstructure:"API_SECRET"`
+	ACCESS_TOKEN_TTL    int    `mapstructure:"ACCESS_TOKEN_TTL"`
+	REFRESH_TOKEN_TTL   int    `mapstructure:"REFRESH_TOKEN_TTL"`
 }
 
 type LoggerSetting struct {
@@ -36,4 +39,11 @@ type MySqlSetting struct {
 type ServerSetting struct {
 	Port int    `mapstructure:"port"`
 	Mode string `mapstructure:"mode"`
+}
+
+type RedisSetting struct {
+	Host     string `mapstructure:"host"`
+	Port     int    `mapstructure:"port"`
+	Password string `mapstructure:"password"`
+	DB       int    `mapstructure:"db"`
 }

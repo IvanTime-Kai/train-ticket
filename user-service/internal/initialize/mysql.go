@@ -45,10 +45,4 @@ func SetPool() {
 	global.Mdb.SetMaxIdleConns(m.MaxIdleConns)
 	global.Mdb.SetMaxOpenConns(m.MaxOpenConns)
 	global.Mdb.SetConnMaxLifetime(time.Duration(m.ConnMaxLifetime) * time.Second)
-
-	global.Logger.Info("MySQL connection pool configured",
-		zap.Int("maxIdleConns", m.MaxIdleConns),
-		zap.Int("maxOpenConns", m.MaxOpenConns),
-		zap.Int("connMaxLifetimeSec", m.ConnMaxLifetime),
-	)
 }

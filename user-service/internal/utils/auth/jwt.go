@@ -9,30 +9,41 @@ import (
 	"github.com/leminhthai/train-ticket/user-service/global"
 )
 
+const (
+	TokenTypeAccess  = "access"
+	TokenTypeRefresh = "refresh"
+)
+
 type Claims struct {
+	TokenType string `json:"token_type"`
 	jwt.RegisteredClaims
 }
 
-func GenerateToken(uuidToken string) (string, error) {
+func GenerateAccessToken(subjectUUID string) (string, error) {
+	ttl := time.Duration(global.Config.JWT.ACCESS_TOKEN_TTL) * time.Minute
+	return generateToken(subjectUUID, TokenTypeAccess, ttl)
+}
+
+func GenerateRefreshToken(subjectUUID string) (string, error) {
+	ttl := time.Duration(global.Config.JWT.REFRESH_TOKEN_TTL) * time.Minute
+	return generateToken(subjectUUID, TokenTypeRefresh, ttl)
+}
+
+func generateToken(subjectUUID, tokenType string, ttl time.Duration) (string, error) {
 	secret := global.Config.JWT.API_SECRET
-	timeEx := global.Config.JWT.JWT_EXPIRATION
-
-	expiration, err := time.ParseDuration(timeEx)
-
-	if err != nil {
-		return "", fmt.Errorf("Invalid JWT_EXPIRATION duration: %s, error: %w", timeEx, err)
+	if secret == "" {
+		return "", fmt.Errorf("JWT secret is not configured")
 	}
 
 	now := time.Now()
-	expiresAt := now.Add(expiration)
-
 	claims := Claims{
+		TokenType: tokenType,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ID:        uuid.New().String(),
-			ExpiresAt: jwt.NewNumericDate(expiresAt),
-			IssuedAt:  jwt.NewNumericDate(now),
-			Subject:   uuidToken,
+			Subject:   subjectUUID,
 			Issuer:    "train-ticket",
+			IssuedAt:  jwt.NewNumericDate(now),
+			ExpiresAt: jwt.NewNumericDate(now.Add(ttl)),
 		},
 	}
 
@@ -55,10 +66,16 @@ func ParseToken(tokenStr string) (*Claims, error) {
 	return claims, nil
 }
 
-func VerifyTokenSubject(token string) (*jwt.RegisteredClaims, error) {
-	claims, err := ParseJWTTokenSubject(token)
+func VerifyTokenSubject(tokenStr string) (*jwt.RegisteredClaims, error) {
+	claims, err := ParseToken(tokenStr)
 	if err != nil {
 		return nil, err
 	}
-	return claims, nil
+
+	// Chỉ cho phép Access Token đi qua middleware
+	if claims.TokenType != TokenTypeAccess {
+		return nil, fmt.Errorf("invalid token type")
+	}
+
+	return &claims.RegisteredClaims, nil
 }

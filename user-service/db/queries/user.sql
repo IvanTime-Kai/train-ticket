@@ -12,3 +12,13 @@ SELECT * FROM users WHERE email = ? LIMIT 1;
 UPDATE users
 SET full_name = ?, phone = ?, updated_at = NOW()
 WHERE id = ?;
+
+-- name: UpdateLastLogin :exec
+UPDATE users
+SET last_login_at = NOW()
+WHERE id = ?;
+
+-- name: VerifyUser :exec
+UPDATE users
+SET is_verified = 1
+WHERE id = ?;

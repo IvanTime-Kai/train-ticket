@@ -1,8 +1,11 @@
 package initialize
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/leminhthai/train-ticket/user-service/global"
+	"github.com/leminhthai/train-ticket/user-service/internal/router"
 )
 
 func InitRouter() *gin.Engine {
@@ -17,9 +20,17 @@ func InitRouter() *gin.Engine {
 		r = gin.New()
 	}
 
-	r.GET("/health", func(c *gin.Context) {
-		c.JSON(200, gin.H{"status": "ok", "service": "user-service"})
+	r.GET("/health-check", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{"message": "User Service is running"})
 	})
+
+	MainGroup := r.Group("/api/v1")
+	authRouter := router.RouterGroupApp.AuthRouter
+	userRouter := router.RouterGroupApp.UserRouter
+	{
+		authRouter.InitAuthRouter(MainGroup)
+		userRouter.InitUserRouter(MainGroup)
+	}
 
 	return r
 }

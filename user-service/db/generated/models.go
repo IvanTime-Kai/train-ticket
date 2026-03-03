@@ -10,13 +10,24 @@ import (
 )
 
 type User struct {
-	ID        string         `json:"id"`
-	Email     string         `json:"email"`
-	Password  string         `json:"password"`
-	FullName  string         `json:"full_name"`
-	Phone     sql.NullString `json:"phone"`
-	Role      string         `json:"role"`
-	IsActive  bool           `json:"is_active"`
-	CreatedAt time.Time      `json:"created_at"`
-	UpdatedAt time.Time      `json:"updated_at"`
+	ID          string         `json:"id"`
+	Email       string         `json:"email"`
+	Password    string         `json:"password"`
+	FullName    string         `json:"full_name"`
+	Phone       sql.NullString `json:"phone"`
+	Role        string         `json:"role"`
+	IsActive    bool           `json:"is_active"`
+	CreatedAt   time.Time      `json:"created_at"`
+	UpdatedAt   time.Time      `json:"updated_at"`
+	IsVerified  bool           `json:"is_verified"`
+	LastLoginAt sql.NullTime   `json:"last_login_at"`
+}
+
+type UserSession struct {
+	ID          string         `json:"id"`
+	UserID      string         `json:"user_id"`
+	Device      sql.NullString `json:"device"`
+	IpAddress   sql.NullString `json:"ip_address"`
+	LoggedInAt  time.Time      `json:"logged_in_at"`
+	LoggedOutAt sql.NullTime   `json:"logged_out_at"`
 }
