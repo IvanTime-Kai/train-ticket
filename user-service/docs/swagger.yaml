@@ -1,0 +1,314 @@
+basePath: /api/v1
+definitions:
+  model.ChangePasswordRequest:
+    properties:
+      new_password:
+        minLength: 8
+        type: string
+      old_password:
+        type: string
+    required:
+    - new_password
+    - old_password
+    type: object
+  model.ForgotPasswordRequest:
+    properties:
+      email:
+        type: string
+    required:
+    - email
+    type: object
+  model.LoginRequest:
+    properties:
+      device:
+        type: string
+      email:
+        type: string
+      ip_address:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  model.RefreshTokenRequest:
+    properties:
+      refresh_token:
+        type: string
+    required:
+    - refresh_token
+    type: object
+  model.RegisterRequest:
+    properties:
+      email:
+        type: string
+      full_name:
+        type: string
+      password:
+        minLength: 8
+        type: string
+      phone:
+        type: string
+    required:
+    - email
+    - full_name
+    - password
+    - phone
+    type: object
+  model.ResetPasswordRequest:
+    properties:
+      new_password:
+        minLength: 8
+        type: string
+      reset_token:
+        type: string
+    required:
+    - new_password
+    - reset_token
+    type: object
+  model.VerifyOTPRequest:
+    properties:
+      email:
+        type: string
+      otp:
+        type: string
+    required:
+    - email
+    - otp
+    type: object
+  response.ResponseData:
+    properties:
+      code:
+        type: integer
+      data: {}
+      message:
+        type: string
+    type: object
+host: localhost:8082
+info:
+  contact: {}
+  description: API documentation for User Service
+  title: Train Ticket User Service API
+  version: "1.0"
+paths:
+  /auth/change-password:
+    post:
+      consumes:
+      - application/json
+      description: Đổi mật khẩu
+      parameters:
+      - description: Change Password Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.ChangePasswordRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseData'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.ResponseData'
+      security:
+      - BearerAuth: []
+      summary: Change Password
+      tags:
+      - auth
+  /auth/forgot-password:
+    post:
+      consumes:
+      - application/json
+      description: Gửi OTP qua email
+      parameters:
+      - description: Forgot Password Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.ForgotPasswordRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseData'
+      summary: Forgot Password
+      tags:
+      - auth
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Đăng nhập
+      parameters:
+      - description: Login Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseData'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.ResponseData'
+      summary: Login
+      tags:
+      - auth
+  /auth/logout:
+    post:
+      description: Đăng xuất
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseData'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.ResponseData'
+      security:
+      - BearerAuth: []
+      summary: Logout
+      tags:
+      - auth
+  /auth/refresh-token:
+    post:
+      consumes:
+      - application/json
+      description: Lấy Access Token mới
+      parameters:
+      - description: Refresh Token Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.RefreshTokenRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseData'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.ResponseData'
+      summary: Refresh Token
+      tags:
+      - auth
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Đăng ký tài khoản mới
+      parameters:
+      - description: Register Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.ResponseData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseData'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/response.ResponseData'
+      summary: Register
+      tags:
+      - auth
+  /auth/reset-password:
+    post:
+      consumes:
+      - application/json
+      description: Đặt lại mật khẩu
+      parameters:
+      - description: Reset Password Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.ResetPasswordRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseData'
+      summary: Reset Password
+      tags:
+      - auth
+  /auth/verify-otp:
+    post:
+      consumes:
+      - application/json
+      description: Xác thực OTP
+      parameters:
+      - description: Verify OTP Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.VerifyOTPRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseData'
+      summary: Verify OTP
+      tags:
+      - auth
+securityDefinitions:
+  BearerAuth:
+    description: Type "Bearer" followed by a space and JWT token
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

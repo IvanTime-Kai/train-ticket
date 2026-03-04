@@ -18,6 +18,16 @@ func InitAuth(us service.UserService) {
 	Auth.us = us
 }
 
+// @Summary     Login
+// @Description Đăng nhập
+// @Tags        auth
+// @Accept      json
+// @Produce     json
+// @Param       request body model.LoginRequest true "Login Request"
+// @Success     200 {object} response.ResponseData
+// @Failure     400 {object} response.ResponseData
+// @Failure     401 {object} response.ResponseData
+// @Router      /auth/login [post]
 func (ah *AuthHandler) Login(c *gin.Context) {
 	var req model.LoginRequest
 
@@ -38,6 +48,16 @@ func (ah *AuthHandler) Login(c *gin.Context) {
 	response.SuccessResponse(c, response.ErrCodeSuccess, user)
 }
 
+// @Summary     Register
+// @Description Đăng ký tài khoản mới
+// @Tags        auth
+// @Accept      json
+// @Produce     json
+// @Param       request body model.RegisterRequest true "Register Request"
+// @Success     201 {object} response.ResponseData
+// @Failure     400 {object} response.ResponseData
+// @Failure     409 {object} response.ResponseData
+// @Router      /auth/register [post]
 func (ah *AuthHandler) Register(c *gin.Context) {
 	var req model.RegisterRequest
 
@@ -55,6 +75,13 @@ func (ah *AuthHandler) Register(c *gin.Context) {
 	response.SuccessResponse(c, response.ErrCodeSuccess, user)
 }
 
+// @Summary     Logout
+// @Description Đăng xuất
+// @Tags        auth
+// @Security    BearerAuth
+// @Success     200 {object} response.ResponseData
+// @Failure     401 {object} response.ResponseData
+// @Router      /auth/logout [post]
 func (ah *AuthHandler) Logout(c *gin.Context) {
 	userId, _ := c.Request.Context().Value("subjectUUID").(string)
 
@@ -73,6 +100,15 @@ func (ah *AuthHandler) Logout(c *gin.Context) {
 	response.SuccessResponse(c, response.ErrCodeSuccess, nil)
 }
 
+// @Summary     Refresh Token
+// @Description Lấy Access Token mới
+// @Tags        auth
+// @Accept      json
+// @Produce     json
+// @Param       request body model.RefreshTokenRequest true "Refresh Token Request"
+// @Success     200 {object} response.ResponseData
+// @Failure     401 {object} response.ResponseData
+// @Router      /auth/refresh-token [post]
 func (ah *AuthHandler) RefreshToken(c *gin.Context) {
 	var req model.RefreshTokenRequest
 
@@ -93,6 +129,15 @@ func (ah *AuthHandler) RefreshToken(c *gin.Context) {
 
 }
 
+// @Summary     Forgot Password
+// @Description Gửi OTP qua email
+// @Tags        auth
+// @Accept      json
+// @Produce     json
+// @Param       request body model.ForgotPasswordRequest true "Forgot Password Request"
+// @Success     200 {object} response.ResponseData
+// @Failure     400 {object} response.ResponseData
+// @Router      /auth/forgot-password [post]
 func (ah *AuthHandler) ForgotPassword(c *gin.Context) {
 	var req model.ForgotPasswordRequest
 
@@ -109,6 +154,15 @@ func (ah *AuthHandler) ForgotPassword(c *gin.Context) {
 	response.SuccessResponse(c, response.ErrCodeSuccess, nil)
 }
 
+// @Summary     Verify OTP
+// @Description Xác thực OTP
+// @Tags        auth
+// @Accept      json
+// @Produce     json
+// @Param       request body model.VerifyOTPRequest true "Verify OTP Request"
+// @Success     200 {object} response.ResponseData
+// @Failure     400 {object} response.ResponseData
+// @Router      /auth/verify-otp [post]
 func (ah *AuthHandler) VerifyOTP(c *gin.Context) {
 	var req model.VerifyOTPRequest
 
@@ -127,6 +181,15 @@ func (ah *AuthHandler) VerifyOTP(c *gin.Context) {
 	})
 }
 
+// @Summary     Reset Password
+// @Description Đặt lại mật khẩu
+// @Tags        auth
+// @Accept      json
+// @Produce     json
+// @Param       request body model.ResetPasswordRequest true "Reset Password Request"
+// @Success     200 {object} response.ResponseData
+// @Failure     400 {object} response.ResponseData
+// @Router      /auth/reset-password [post]
 func (uh *AuthHandler) ResetPassword(c *gin.Context) {
 	var req model.ResetPasswordRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -142,6 +205,17 @@ func (uh *AuthHandler) ResetPassword(c *gin.Context) {
 	response.SuccessResponse(c, response.ErrCodeSuccess, nil)
 }
 
+// @Summary     Change Password
+// @Description Đổi mật khẩu
+// @Tags        auth
+// @Security    BearerAuth
+// @Accept      json
+// @Produce     json
+// @Param       request body model.ChangePasswordRequest true "Change Password Request"
+// @Success     200 {object} response.ResponseData
+// @Failure     400 {object} response.ResponseData
+// @Failure     401 {object} response.ResponseData
+// @Router      /auth/change-password [post]
 func (uh *UserHandler) ChangePassword(c *gin.Context) {
 	userID, _ := c.Request.Context().Value("subjectUUID").(string)
 	if userID == "" {

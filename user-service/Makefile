@@ -17,6 +17,9 @@ build:
 start: build
 	./bin/user-service
 
+swag:
+	swag init -g cmd/server/main.go
+
 migrate-up:
 	goose -dir db/migrations mysql "$(MYSQL_DSN)" up
 

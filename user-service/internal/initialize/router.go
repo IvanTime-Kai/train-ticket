@@ -6,6 +6,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/leminhthai/train-ticket/user-service/global"
 	"github.com/leminhthai/train-ticket/user-service/internal/router"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
+	_ "github.com/leminhthai/train-ticket/user-service/docs"
 )
 
 func InitRouter() *gin.Engine {
@@ -23,6 +26,9 @@ func InitRouter() *gin.Engine {
 	r.GET("/health-check", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"message": "User Service is running"})
 	})
+
+	// Swagger UI
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	MainGroup := r.Group("/api/v1")
 	authRouter := router.RouterGroupApp.AuthRouter
