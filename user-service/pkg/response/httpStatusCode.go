@@ -7,6 +7,7 @@ const (
 	ErrInvalidCreds      = 40002
 	ErrUserNotFound      = 40004
 	ErrUnauthorized      = 40003
+	ErrInternalServer    = 50000
 )
 
 var msg = map[int]string{
@@ -16,4 +17,5 @@ var msg = map[int]string{
 	ErrInvalidCreds:      "Invalid email or password",
 	ErrUserNotFound:      "User not found",
 	ErrUnauthorized:      "Unauthorized",
+	ErrInternalServer:    "Internal Server",
 }

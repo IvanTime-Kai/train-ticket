@@ -16,6 +16,7 @@ type Querier interface {
 	GetUserByID(ctx context.Context, id string) (User, error)
 	LogoutAllSessions(ctx context.Context, userID string) error
 	UpdateLastLogin(ctx context.Context, id string) error
+	UpdatePassword(ctx context.Context, arg UpdatePasswordParams) error
 	UpdateSessionLogout(ctx context.Context, id string) error
 	UpdateUser(ctx context.Context, arg UpdateUserParams) error
 	VerifyUser(ctx context.Context, id string) error

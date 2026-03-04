@@ -22,3 +22,8 @@ WHERE id = ?;
 UPDATE users
 SET is_verified = 1
 WHERE id = ?;
+
+-- name: UpdatePassword :exec
+UPDATE users
+SET password = ?, updated_at = NOW()
+WHERE id = ?;

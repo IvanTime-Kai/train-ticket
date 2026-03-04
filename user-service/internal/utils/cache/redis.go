@@ -11,6 +11,8 @@ import (
 const (
 	prefixRefreshToken = "refresh_token:%s" // refresh_token:<userID>
 	prefixBlacklist    = "blacklist:%s"     // blacklist:<jti>
+	prefixOtp          = "otp:%s"           // otp:<otp>
+	prefixResetToken   = "reset_token:%s"   // reset_token:<resetToken>
 )
 
 // ─────────────────────────────────────────
@@ -49,4 +51,44 @@ func IsTokenBlacklisted(ctx context.Context, jti string) (bool, error) {
 		return false, err
 	}
 	return val > 0, nil
+}
+
+// ─────────────────────────────────────────
+// OTP
+// ─────────────────────────────────────────
+
+func SaveOTP(ctx context.Context, email, otp string) error {
+	key := fmt.Sprintf(prefixOtp, email)
+	ttl := 5 * time.Minute
+	return global.Rdb.Set(ctx, key, otp, ttl).Err()
+}
+
+func GetOTP(ctx context.Context, email string) (string, error) {
+	key := fmt.Sprintf(prefixOtp, email)
+	return global.Rdb.Get(ctx, key).Result()
+}
+
+func DeleteOTP(ctx context.Context, email string) error {
+	key := fmt.Sprintf(prefixOtp, email)
+	return global.Rdb.Del(ctx, key).Err()
+}
+
+// ─────────────────────────────────────────
+// Reset Token
+// ─────────────────────────────────────────
+
+func SaveResetToken(ctx context.Context, email, resetToken string) error {
+	key := fmt.Sprintf(prefixResetToken, email)
+	ttl := 10 * time.Minute
+	return global.Rdb.Set(ctx, key, resetToken, ttl).Err()
+}
+
+func GetResetToken(ctx context.Context, email string) (string, error) {
+	key := fmt.Sprintf(prefixResetToken, email)
+	return global.Rdb.Get(ctx, key).Result()
+}
+
+func DeleteResetToken(ctx context.Context, email string) error {
+	key := fmt.Sprintf(prefixResetToken, email)
+	return global.Rdb.Del(ctx, key).Err()
 }

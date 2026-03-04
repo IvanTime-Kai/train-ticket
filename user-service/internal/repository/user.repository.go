@@ -18,6 +18,7 @@ type UserRepository interface {
 	CreateSession(ctx context.Context, userId, device, ipAddress string) error
 	UpdateSessionLogout(ctx context.Context, sessionId string) error
 	LogoutAllSessions(ctx context.Context, userId string) error
+	UpdatePassword(ctx context.Context, id, hashedPassword string) error
 }
 
 type userRepository struct {
@@ -81,4 +82,11 @@ func (r *userRepository) UpdateSessionLogout(ctx context.Context, sessionId stri
 
 func (r *userRepository) LogoutAllSessions(ctx context.Context, userId string) error {
 	return r.queries.LogoutAllSessions(ctx, userId)
+}
+
+func (r *userRepository) UpdatePassword(ctx context.Context, id, hashedPassword string) error {
+	return r.queries.UpdatePassword(ctx, db.UpdatePasswordParams{
+		ID:       id,
+		Password: hashedPassword,
+	})
 }

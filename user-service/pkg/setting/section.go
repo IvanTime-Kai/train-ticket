@@ -6,6 +6,7 @@ type Settings struct {
 	MySql  MySqlSetting  `mapstructure:"mysql"`
 	Server ServerSetting `mapstructure:"server"`
 	Redis  RedisSetting  `mapstructure:"redis"`
+	Email  EmailSetting  `mapstructure:"email"`
 }
 
 type JWTSetting struct {
@@ -46,4 +47,12 @@ type RedisSetting struct {
 	Port     int    `mapstructure:"port"`
 	Password string `mapstructure:"password"`
 	DB       int    `mapstructure:"db"`
+}
+
+type EmailSetting struct {
+	Host     string `mapstructure:"host"`
+	Port     int    `mapstructure:"port"`
+	Username string `mapstructure:"username"`
+	Password string `mapstructure:"password"`
+	From     string `mapstructure:"from"`
 }

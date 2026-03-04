@@ -93,6 +93,22 @@ func (q *Queries) UpdateLastLogin(ctx context.Context, id string) error {
 	return err
 }
 
+const updatePassword = `-- name: UpdatePassword :exec
+UPDATE users
+SET password = ?, updated_at = NOW()
+WHERE id = ?
+`
+
+type UpdatePasswordParams struct {
+	Password string `json:"password"`
+	ID       string `json:"id"`
+}
+
+func (q *Queries) UpdatePassword(ctx context.Context, arg UpdatePasswordParams) error {
+	_, err := q.db.ExecContext(ctx, updatePassword, arg.Password, arg.ID)
+	return err
+}
+
 const updateUser = `-- name: UpdateUser :exec
 UPDATE users
 SET full_name = ?, phone = ?, updated_at = NOW()
