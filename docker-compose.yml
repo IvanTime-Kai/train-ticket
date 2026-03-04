@@ -16,6 +16,8 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
+    networks:
+      - train-network
 
   redis:
     image: redis:7-alpine
@@ -31,6 +33,27 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - train-network
+
+  user-service:
+    build: ./user-service
+    container_name: user-service
+    ports:
+      - "8082:8082"
+    depends_on:
+      mysql-user:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      CONFIG_NAME: docker
+    networks:
+      - train-network
+
+networks:
+  train-network:
+    driver: bridge
 
 volumes:
   mysql_user_data:

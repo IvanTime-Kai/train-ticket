@@ -1,0 +1,36 @@
+jwt:
+  TOKEN_HOUR_LIFESPAN: 1
+  JWT_EXPIRATION: 1h
+  API_SECRET: "xxx.yyy.zzz"
+  access_token_ttl: 15
+  refresh_token_ttl: 10080
+logger:
+  log_level: info
+  file_log_name: "./storages/logs/prod.001.log"
+  max_size: 500
+  max_backups: 3
+  max_age: 28
+  compress: true
+mysql:
+  host: mysql-user      # ← hostname Docker
+  port: 3306            # ← port nội bộ Docker
+  username: app
+  password: app123
+  dbName: user_db
+  maxIdleConns: 10
+  maxOpenConns: 100
+  connMaxLifeTime: 3600
+server:
+  port: 8082
+  mode: "release"
+redis:
+  host: redis           # ← hostname Docker
+  port: 6379            # ← port nội bộ Docker
+  password: ""
+  db: 0
+email:
+  host: smtp.gmail.com
+  port: 587
+  username: "your-gmail@gmail.com"
+  password: "your-app-password"
+  from: "your-gmail@gmail.com"
