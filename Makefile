@@ -1,4 +1,4 @@
-.PHONY: user-service-run user-service-build user-service-sqlgen
+.PHONY: user-service-run user-service-build user-service-sqlgen train-service-run train-service-build train-service-sqlgen
 
 # User service
 user-service-run:
@@ -10,9 +10,23 @@ user-service-build:
 user-service-sqlgen:
 	$(MAKE) -C user-service sqlgen
 
-docker-build:
+# Train service
+train-service-run:
+	$(MAKE) -C train-service run
+
+train-service-build:
+	$(MAKE) -C train-service build
+
+train-service-sqlgen:
+	$(MAKE) -C train-service sqlgen
+
+docker-build-user-service:
 	@echo "🐳 Building Docker image..."
 	@docker compose build user-service
+
+docker-build-train-service:
+	@echo "🐳 Building Docker image..."
+	@docker compose build train-service
 
 docker-up:
 	@echo "🐳 Starting all services..."
@@ -22,6 +36,10 @@ docker-down:
 	@echo "🐳 Stopping all services..."
 	@docker compose down
 
-docker-logs:
+docker-logs-user-service:
 	@echo "📋 Showing logs..."
 	@docker compose logs -f user-service
+
+docker-logs-train-service:
+	@echo "📋 Showing logs..."
+	@docker compose logs -f train-service

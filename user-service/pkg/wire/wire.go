@@ -13,7 +13,6 @@ import (
 
 // UserSet nhóm provider cho user (queries -> repo -> service).
 var UserSet = wire.NewSet(
-	ProvideQueries,
 	repository.NewUserRepository,
 	service.NewUserService,
 )
@@ -21,6 +20,7 @@ var UserSet = wire.NewSet(
 // InitializeApp tạo toàn bộ dependency. Một injector, một lần *sql.DB. Chạy `make wire` sau khi sửa Set/App.
 func InitializeApp(sqlDB *sql.DB) *App {
 	wire.Build(
+		ProvideQueries,
 		UserSet,
 		wire.Struct(new(App), "*"),
 	)

@@ -1,0 +1,44 @@
+# Git
+.git
+.gitignore
+
+# Env & secrets
+.env
+.env.*
+!.env.example
+
+# Build output
+bin/
+*.exe
+
+# IDE & editor
+.idea
+.vscode
+.cursor
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test & coverage
+*.test
+coverage.*
+*.out
+
+# Docker
+Dockerfile
+dockerfile
+.dockerignore
+
+# Storage & logs
+storages/
+*.log
+
+# Misc
+Makefile
+*.md
+tmp/
+temp/

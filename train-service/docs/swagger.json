@@ -1,0 +1,628 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "API documentation for Train Service",
+        "title": "Train Ticket Train Service API",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:8083",
+    "basePath": "/api/v1",
+    "paths": {
+        "/routes": {
+            "post": {
+                "description": "Tạo tuyến đường mới giữa 2 ga",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "routes"
+                ],
+                "summary": "Tạo tuyến đường",
+                "parameters": [
+                    {
+                        "description": "Create Route Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_leminhthai_train-ticket_train-service_internal_model.CreateRouteRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_leminhthai_train-ticket_train-service_pkg_response.ResponseData"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_leminhthai_train-ticket_train-service_pkg_response.ResponseData"
+                        }
+                    }
+                }
+            }
+        },
+        "/stations": {
+            "get": {
+                "description": "Lấy danh sách tất cả ga tàu",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "stations"
+                ],
+                "summary": "Danh sách ga tàu",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_leminhthai_train-ticket_train-service_pkg_response.ResponseData"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Tạo ga tàu mới",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "stations"
+                ],
+                "summary": "Tạo ga tàu",
+                "parameters": [
+                    {
+                        "description": "Create Station Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_leminhthai_train-ticket_train-service_internal_model.CreateStationRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_leminhthai_train-ticket_train-service_pkg_response.ResponseData"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_leminhthai_train-ticket_train-service_pkg_response.ResponseData"
+                        }
+                    }
+                }
+            }
+        },
+        "/stations/{id}": {
+            "get": {
+                "description": "Lấy thông tin ga tàu theo ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "stations"
+                ],
+                "summary": "Chi tiết ga tàu",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Station ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_leminhthai_train-ticket_train-service_pkg_response.ResponseData"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_leminhthai_train-ticket_train-service_pkg_response.ResponseData"
+                        }
+                    }
+                }
+            }
+        },
+        "/trains": {
+            "get": {
+                "description": "Lấy danh sách tất cả đoàn tàu",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "trains"
+                ],
+                "summary": "Danh sách đoàn tàu",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_leminhthai_train-ticket_train-service_pkg_response.ResponseData"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Tạo đoàn tàu mới",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "trains"
+                ],
+                "summary": "Tạo đoàn tàu",
+                "parameters": [
+                    {
+                        "description": "Create Train Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_leminhthai_train-ticket_train-service_internal_model.CreateTrainRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_leminhthai_train-ticket_train-service_pkg_response.ResponseData"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_leminhthai_train-ticket_train-service_pkg_response.ResponseData"
+                        }
+                    }
+                }
+            }
+        },
+        "/trains/{id}": {
+            "get": {
+                "description": "Lấy thông tin đoàn tàu theo ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "trains"
+                ],
+                "summary": "Chi tiết đoàn tàu",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Train ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_leminhthai_train-ticket_train-service_pkg_response.ResponseData"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_leminhthai_train-ticket_train-service_pkg_response.ResponseData"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Đổi trạng thái đoàn tàu thành inactive",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "trains"
+                ],
+                "summary": "Vô hiệu hoá đoàn tàu",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Train ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_leminhthai_train-ticket_train-service_pkg_response.ResponseData"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_leminhthai_train-ticket_train-service_pkg_response.ResponseData"
+                        }
+                    }
+                }
+            }
+        },
+        "/trains/{id}/seats": {
+            "get": {
+                "description": "Lấy danh sách ghế của đoàn tàu",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "trains"
+                ],
+                "summary": "Danh sách ghế",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Train ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_leminhthai_train-ticket_train-service_pkg_response.ResponseData"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Thêm ghế mới vào đoàn tàu",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "trains"
+                ],
+                "summary": "Thêm ghế",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Train ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Create Seat Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_leminhthai_train-ticket_train-service_internal_model.CreateSeatRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_leminhthai_train-ticket_train-service_pkg_response.ResponseData"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_leminhthai_train-ticket_train-service_pkg_response.ResponseData"
+                        }
+                    }
+                }
+            }
+        },
+        "/trips": {
+            "post": {
+                "description": "Tạo chuyến tàu mới",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "trips"
+                ],
+                "summary": "Tạo chuyến tàu",
+                "parameters": [
+                    {
+                        "description": "Create Trip Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_leminhthai_train-ticket_train-service_internal_model.CreateTripRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_leminhthai_train-ticket_train-service_pkg_response.ResponseData"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_leminhthai_train-ticket_train-service_pkg_response.ResponseData"
+                        }
+                    }
+                }
+            }
+        },
+        "/trips/search": {
+            "get": {
+                "description": "Tìm chuyến tàu theo ga và ngày",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "trips"
+                ],
+                "summary": "Tìm kiếm chuyến tàu",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Mã ga xuất phát (VD: HAN)",
+                        "name": "from",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Mã ga đến (VD: SGN)",
+                        "name": "to",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Ngày khởi hành (YYYY-MM-DD)",
+                        "name": "date",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_leminhthai_train-ticket_train-service_pkg_response.ResponseData"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_leminhthai_train-ticket_train-service_pkg_response.ResponseData"
+                        }
+                    }
+                }
+            }
+        },
+        "/trips/{id}": {
+            "get": {
+                "description": "Lấy thông tin chuyến tàu theo ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "trips"
+                ],
+                "summary": "Chi tiết chuyến tàu",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Trip ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_leminhthai_train-ticket_train-service_pkg_response.ResponseData"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_leminhthai_train-ticket_train-service_pkg_response.ResponseData"
+                        }
+                    }
+                }
+            }
+        },
+        "/trips/{id}/cancel": {
+            "post": {
+                "description": "Huỷ chuyến tàu theo ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "trips"
+                ],
+                "summary": "Huỷ chuyến tàu",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Trip ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_leminhthai_train-ticket_train-service_pkg_response.ResponseData"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_leminhthai_train-ticket_train-service_pkg_response.ResponseData"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "github_com_leminhthai_train-ticket_train-service_internal_model.CreateRouteRequest": {
+            "type": "object",
+            "required": [
+                "destination_station_id",
+                "origin_station_id"
+            ],
+            "properties": {
+                "destination_station_id": {
+                    "type": "string"
+                },
+                "distance_km": {
+                    "type": "integer"
+                },
+                "origin_station_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_leminhthai_train-ticket_train-service_internal_model.CreateSeatRequest": {
+            "type": "object",
+            "required": [
+                "class",
+                "price",
+                "seat_number"
+            ],
+            "properties": {
+                "class": {
+                    "type": "string",
+                    "enum": [
+                        "economy",
+                        "business",
+                        "vip"
+                    ]
+                },
+                "price": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "seat_number": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_leminhthai_train-ticket_train-service_internal_model.CreateStationRequest": {
+            "type": "object",
+            "required": [
+                "city",
+                "code",
+                "name"
+            ],
+            "properties": {
+                "city": {
+                    "type": "string"
+                },
+                "code": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_leminhthai_train-ticket_train-service_internal_model.CreateTrainRequest": {
+            "type": "object",
+            "required": [
+                "name",
+                "total_seats"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "total_seats": {
+                    "type": "integer",
+                    "minimum": 1
+                }
+            }
+        },
+        "github_com_leminhthai_train-ticket_train-service_internal_model.CreateTripRequest": {
+            "type": "object",
+            "required": [
+                "arrival_time",
+                "departure_time",
+                "route_id",
+                "train_id"
+            ],
+            "properties": {
+                "arrival_time": {
+                    "type": "string"
+                },
+                "departure_time": {
+                    "description": "format: 2006-01-02 15:04:05",
+                    "type": "string"
+                },
+                "route_id": {
+                    "type": "string"
+                },
+                "train_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_leminhthai_train-ticket_train-service_pkg_response.ResponseData": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {},
+                "message": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    }
+}

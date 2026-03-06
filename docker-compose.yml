@@ -51,10 +51,44 @@ services:
     networks:
       - train-network
 
+  mysql-train:
+    image: mysql:8.0
+    container_name: mysql-train
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: train_db
+      MYSQL_USER: app
+      MYSQL_PASSWORD: app123
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_train_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - train-network
+  
+  train-service:
+    build: ./train-service
+    container_name: train-service
+    ports:
+      - "8083:8083"
+    depends_on:
+      mysql-train:
+        condition: service_healthy
+    environment:
+      CONFIG_NAME: docker
+    networks:
+      - train-network
+    
 networks:
   train-network:
     driver: bridge
 
 volumes:
   mysql_user_data:
+  mysql_train_data:
   redis_data:

@@ -1,0 +1,19 @@
+logger:
+  log_level: info
+  file_log_name: "./storages/logs/prod.001.log"
+  max_size: 500
+  max_backups: 3
+  max_age: 28
+  compress: true
+mysql:
+  host: mysql-train
+  port: 3306
+  username: app
+  password: app123
+  dbName: train_db
+  maxIdleConns: 10
+  maxOpenConns: 100
+  connMaxLifeTime: 3600
+server:
+  port: 8083
+  mode: "release"

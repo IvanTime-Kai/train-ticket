@@ -1,0 +1,418 @@
+basePath: /api/v1
+definitions:
+  github_com_leminhthai_train-ticket_train-service_internal_model.CreateRouteRequest:
+    properties:
+      destination_station_id:
+        type: string
+      distance_km:
+        type: integer
+      origin_station_id:
+        type: string
+    required:
+    - destination_station_id
+    - origin_station_id
+    type: object
+  github_com_leminhthai_train-ticket_train-service_internal_model.CreateSeatRequest:
+    properties:
+      class:
+        enum:
+        - economy
+        - business
+        - vip
+        type: string
+      price:
+        minimum: 0
+        type: number
+      seat_number:
+        type: string
+    required:
+    - class
+    - price
+    - seat_number
+    type: object
+  github_com_leminhthai_train-ticket_train-service_internal_model.CreateStationRequest:
+    properties:
+      city:
+        type: string
+      code:
+        type: string
+      name:
+        type: string
+    required:
+    - city
+    - code
+    - name
+    type: object
+  github_com_leminhthai_train-ticket_train-service_internal_model.CreateTrainRequest:
+    properties:
+      name:
+        type: string
+      total_seats:
+        minimum: 1
+        type: integer
+    required:
+    - name
+    - total_seats
+    type: object
+  github_com_leminhthai_train-ticket_train-service_internal_model.CreateTripRequest:
+    properties:
+      arrival_time:
+        type: string
+      departure_time:
+        description: 'format: 2006-01-02 15:04:05'
+        type: string
+      route_id:
+        type: string
+      train_id:
+        type: string
+    required:
+    - arrival_time
+    - departure_time
+    - route_id
+    - train_id
+    type: object
+  github_com_leminhthai_train-ticket_train-service_pkg_response.ResponseData:
+    properties:
+      code:
+        type: integer
+      data: {}
+      message:
+        type: string
+    type: object
+host: localhost:8083
+info:
+  contact: {}
+  description: API documentation for Train Service
+  title: Train Ticket Train Service API
+  version: "1.0"
+paths:
+  /routes:
+    post:
+      consumes:
+      - application/json
+      description: Tạo tuyến đường mới giữa 2 ga
+      parameters:
+      - description: Create Route Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_leminhthai_train-ticket_train-service_internal_model.CreateRouteRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_leminhthai_train-ticket_train-service_pkg_response.ResponseData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_leminhthai_train-ticket_train-service_pkg_response.ResponseData'
+      summary: Tạo tuyến đường
+      tags:
+      - routes
+  /stations:
+    get:
+      description: Lấy danh sách tất cả ga tàu
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_leminhthai_train-ticket_train-service_pkg_response.ResponseData'
+      summary: Danh sách ga tàu
+      tags:
+      - stations
+    post:
+      consumes:
+      - application/json
+      description: Tạo ga tàu mới
+      parameters:
+      - description: Create Station Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_leminhthai_train-ticket_train-service_internal_model.CreateStationRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_leminhthai_train-ticket_train-service_pkg_response.ResponseData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_leminhthai_train-ticket_train-service_pkg_response.ResponseData'
+      summary: Tạo ga tàu
+      tags:
+      - stations
+  /stations/{id}:
+    get:
+      description: Lấy thông tin ga tàu theo ID
+      parameters:
+      - description: Station ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_leminhthai_train-ticket_train-service_pkg_response.ResponseData'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_leminhthai_train-ticket_train-service_pkg_response.ResponseData'
+      summary: Chi tiết ga tàu
+      tags:
+      - stations
+  /trains:
+    get:
+      description: Lấy danh sách tất cả đoàn tàu
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_leminhthai_train-ticket_train-service_pkg_response.ResponseData'
+      summary: Danh sách đoàn tàu
+      tags:
+      - trains
+    post:
+      consumes:
+      - application/json
+      description: Tạo đoàn tàu mới
+      parameters:
+      - description: Create Train Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_leminhthai_train-ticket_train-service_internal_model.CreateTrainRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_leminhthai_train-ticket_train-service_pkg_response.ResponseData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_leminhthai_train-ticket_train-service_pkg_response.ResponseData'
+      summary: Tạo đoàn tàu
+      tags:
+      - trains
+  /trains/{id}:
+    delete:
+      description: Đổi trạng thái đoàn tàu thành inactive
+      parameters:
+      - description: Train ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_leminhthai_train-ticket_train-service_pkg_response.ResponseData'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_leminhthai_train-ticket_train-service_pkg_response.ResponseData'
+      summary: Vô hiệu hoá đoàn tàu
+      tags:
+      - trains
+    get:
+      description: Lấy thông tin đoàn tàu theo ID
+      parameters:
+      - description: Train ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_leminhthai_train-ticket_train-service_pkg_response.ResponseData'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_leminhthai_train-ticket_train-service_pkg_response.ResponseData'
+      summary: Chi tiết đoàn tàu
+      tags:
+      - trains
+  /trains/{id}/seats:
+    get:
+      description: Lấy danh sách ghế của đoàn tàu
+      parameters:
+      - description: Train ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_leminhthai_train-ticket_train-service_pkg_response.ResponseData'
+      summary: Danh sách ghế
+      tags:
+      - trains
+    post:
+      consumes:
+      - application/json
+      description: Thêm ghế mới vào đoàn tàu
+      parameters:
+      - description: Train ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Create Seat Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_leminhthai_train-ticket_train-service_internal_model.CreateSeatRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_leminhthai_train-ticket_train-service_pkg_response.ResponseData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_leminhthai_train-ticket_train-service_pkg_response.ResponseData'
+      summary: Thêm ghế
+      tags:
+      - trains
+  /trips:
+    post:
+      consumes:
+      - application/json
+      description: Tạo chuyến tàu mới
+      parameters:
+      - description: Create Trip Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_leminhthai_train-ticket_train-service_internal_model.CreateTripRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_leminhthai_train-ticket_train-service_pkg_response.ResponseData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_leminhthai_train-ticket_train-service_pkg_response.ResponseData'
+      summary: Tạo chuyến tàu
+      tags:
+      - trips
+  /trips/{id}:
+    get:
+      description: Lấy thông tin chuyến tàu theo ID
+      parameters:
+      - description: Trip ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_leminhthai_train-ticket_train-service_pkg_response.ResponseData'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_leminhthai_train-ticket_train-service_pkg_response.ResponseData'
+      summary: Chi tiết chuyến tàu
+      tags:
+      - trips
+  /trips/{id}/cancel:
+    post:
+      description: Huỷ chuyến tàu theo ID
+      parameters:
+      - description: Trip ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_leminhthai_train-ticket_train-service_pkg_response.ResponseData'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_leminhthai_train-ticket_train-service_pkg_response.ResponseData'
+      summary: Huỷ chuyến tàu
+      tags:
+      - trips
+  /trips/search:
+    get:
+      description: Tìm chuyến tàu theo ga và ngày
+      parameters:
+      - description: 'Mã ga xuất phát (VD: HAN)'
+        in: query
+        name: from
+        required: true
+        type: string
+      - description: 'Mã ga đến (VD: SGN)'
+        in: query
+        name: to
+        required: true
+        type: string
+      - description: Ngày khởi hành (YYYY-MM-DD)
+        in: query
+        name: date
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_leminhthai_train-ticket_train-service_pkg_response.ResponseData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_leminhthai_train-ticket_train-service_pkg_response.ResponseData'
+      summary: Tìm kiếm chuyến tàu
+      tags:
+      - trips
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

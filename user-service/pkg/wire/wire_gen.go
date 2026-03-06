@@ -29,6 +29,4 @@ func InitializeApp(sqlDB *sql.DB) *App {
 // wire.go:
 
 // UserSet nhóm provider cho user (queries -> repo -> service).
-var UserSet = wire.NewSet(
-	ProvideQueries, repository.NewUserRepository, service.NewUserService,
-)
+var UserSet = wire.NewSet(repository.NewUserRepository, service.NewUserService)

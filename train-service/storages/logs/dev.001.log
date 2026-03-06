@@ -1,0 +1,26 @@
+{"level":"INFO","time":"2026-03-06T13:51:04.520+0700","caller":"initialize/run.go:13","msg":"Init Logger Successfully!","ok":"success"}
+{"level":"ERROR","time":"2026-03-06T13:51:04.520+0700","caller":"initialize/mysql.go:14","msg":"Init MySql Failed!!!","error":"sql: unknown driver \"mysql\" (forgotten import?)","stacktrace":"github.com/leminhthai/train-ticket/train-service/internal/initialize.checkErrorPanic\n\t/Users/leminhthai/BE/train-ticket/train-service/internal/initialize/mysql.go:14\ngithub.com/leminhthai/train-ticket/train-service/internal/initialize.InitMySql\n\t/Users/leminhthai/BE/train-ticket/train-service/internal/initialize/mysql.go:28\ngithub.com/leminhthai/train-ticket/train-service/internal/initialize.Run\n\t/Users/leminhthai/BE/train-ticket/train-service/internal/initialize/run.go:15\nmain.main\n\t/Users/leminhthai/BE/train-ticket/train-service/cmd/server/main.go:11\nruntime.main\n\t/usr/local/go/src/runtime/proc.go:290"}
+{"level":"INFO","time":"2026-03-06T13:52:52.350+0700","caller":"initialize/run.go:13","msg":"Init Logger Successfully!","ok":"success"}
+{"level":"INFO","time":"2026-03-06T13:52:52.351+0700","caller":"initialize/mysql.go:30","msg":"Init MySql Successfully!!!"}
+{"level":"INFO","time":"2026-03-06T13:54:40.980+0700","caller":"initialize/run.go:13","msg":"Init Logger Successfully!","ok":"success"}
+{"level":"INFO","time":"2026-03-06T13:54:40.981+0700","caller":"initialize/mysql.go:30","msg":"Init MySql Successfully!!!"}
+{"level":"INFO","time":"2026-03-06T14:07:12.603+0700","caller":"initialize/run.go:13","msg":"Init Logger Successfully!","ok":"success"}
+{"level":"INFO","time":"2026-03-06T14:07:12.603+0700","caller":"initialize/mysql.go:30","msg":"Init MySql Successfully!!!"}
+{"level":"INFO","time":"2026-03-06T14:08:18.778+0700","caller":"initialize/run.go:13","msg":"Init Logger Successfully!","ok":"success"}
+{"level":"INFO","time":"2026-03-06T14:08:18.779+0700","caller":"initialize/mysql.go:30","msg":"Init MySql Successfully!!!"}
+{"level":"INFO","time":"2026-03-06T14:09:51.343+0700","caller":"initialize/run.go:13","msg":"Init Logger Successfully!","ok":"success"}
+{"level":"INFO","time":"2026-03-06T14:09:51.344+0700","caller":"initialize/mysql.go:30","msg":"Init MySql Successfully!!!"}
+{"level":"INFO","time":"2026-03-06T14:10:51.217+0700","caller":"initialize/run.go:13","msg":"Init Logger Successfully!","ok":"success"}
+{"level":"INFO","time":"2026-03-06T14:10:51.217+0700","caller":"initialize/mysql.go:30","msg":"Init MySql Successfully!!!"}
+{"level":"INFO","time":"2026-03-06T14:12:42.705+0700","caller":"initialize/run.go:13","msg":"Init Logger Successfully!","ok":"success"}
+{"level":"INFO","time":"2026-03-06T14:12:42.705+0700","caller":"initialize/mysql.go:30","msg":"Init MySql Successfully!!!"}
+{"level":"INFO","time":"2026-03-06T14:29:30.015+0700","caller":"initialize/run.go:13","msg":"Init Logger Successfully!","ok":"success"}
+{"level":"INFO","time":"2026-03-06T14:29:30.016+0700","caller":"initialize/mysql.go:30","msg":"Init MySql Successfully!!!"}
+{"level":"INFO","time":"2026-03-06T14:30:44.192+0700","caller":"initialize/run.go:13","msg":"Init Logger Successfully!","ok":"success"}
+{"level":"INFO","time":"2026-03-06T14:30:44.193+0700","caller":"initialize/mysql.go:30","msg":"Init MySql Successfully!!!"}
+{"level":"INFO","time":"2026-03-06T14:32:26.831+0700","caller":"initialize/run.go:13","msg":"Init Logger Successfully!","ok":"success"}
+{"level":"INFO","time":"2026-03-06T14:32:26.831+0700","caller":"initialize/mysql.go:30","msg":"Init MySql Successfully!!!"}
+{"level":"INFO","time":"2026-03-06T14:38:53.139+0700","caller":"initialize/run.go:13","msg":"Init Logger Successfully!","ok":"success"}
+{"level":"INFO","time":"2026-03-06T14:38:53.140+0700","caller":"initialize/mysql.go:30","msg":"Init MySql Successfully!!!"}
+{"level":"INFO","time":"2026-03-06T14:40:35.306+0700","caller":"initialize/run.go:13","msg":"Init Logger Successfully!","ok":"success"}
+{"level":"INFO","time":"2026-03-06T14:40:35.307+0700","caller":"initialize/mysql.go:30","msg":"Init MySql Successfully!!!"}
