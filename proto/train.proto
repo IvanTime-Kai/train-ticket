@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package train;
+
+option go_package = "github.com/leminhthai/train-ticket/proto/gen/train";
+
+message SeatInfo {
+  string seat_id     = 1;
+  string seat_number = 2;
+  string class       = 3;
+  double price       = 4;
+}
+
+message ValidateSeatsRequest {
+  string           trip_id  = 1;
+  repeated string  seat_ids = 2;
+}
+
+message ValidateSeatsResponse {
+  bool              valid   = 1;
+  string            message = 2;
+  repeated SeatInfo seats   = 3;
+}
+
+service TrainService {
+  rpc ValidateSeats(ValidateSeatsRequest) returns (ValidateSeatsResponse);
+}
