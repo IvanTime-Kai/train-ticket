@@ -1,0 +1,226 @@
+basePath: /api/v1
+definitions:
+  github_com_leminhthai_train-ticket_booking-service_internal_model.CreateBookingRequest:
+    properties:
+      hold_token:
+        type: string
+      seat_ids:
+        items:
+          type: string
+        minItems: 1
+        type: array
+      trip_id:
+        type: string
+    required:
+    - hold_token
+    - seat_ids
+    - trip_id
+    type: object
+  github_com_leminhthai_train-ticket_booking-service_internal_model.CreatePaymentRequest:
+    properties:
+      booking_id:
+        type: string
+      method:
+        enum:
+        - mock
+        - vnpay
+        - momo
+        type: string
+    required:
+    - booking_id
+    - method
+    type: object
+  github_com_leminhthai_train-ticket_booking-service_internal_model.HoldSeatRequest:
+    properties:
+      seat_ids:
+        items:
+          type: string
+        minItems: 1
+        type: array
+      trip_id:
+        type: string
+    required:
+    - seat_ids
+    - trip_id
+    type: object
+  github_com_leminhthai_train-ticket_booking-service_pkg_response.ResponseData:
+    properties:
+      code:
+        type: integer
+      data: {}
+      message:
+        type: string
+    type: object
+host: localhost:8084
+info:
+  contact: {}
+  description: API documentation for Booking Service
+  title: Train Ticket Booking Service API
+  version: "1.0"
+paths:
+  /bookings:
+    post:
+      consumes:
+      - application/json
+      description: Tạo booking sau khi đã giữ ghế
+      parameters:
+      - description: Create Booking Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_leminhthai_train-ticket_booking-service_internal_model.CreateBookingRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_leminhthai_train-ticket_booking-service_pkg_response.ResponseData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_leminhthai_train-ticket_booking-service_pkg_response.ResponseData'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_leminhthai_train-ticket_booking-service_pkg_response.ResponseData'
+      security:
+      - BearerAuth: []
+      summary: Tạo booking
+      tags:
+      - bookings
+  /bookings/{id}:
+    delete:
+      description: Huỷ booking theo ID
+      parameters:
+      - description: Booking ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_leminhthai_train-ticket_booking-service_pkg_response.ResponseData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_leminhthai_train-ticket_booking-service_pkg_response.ResponseData'
+      security:
+      - BearerAuth: []
+      summary: Huỷ booking
+      tags:
+      - bookings
+    get:
+      description: Lấy thông tin booking theo ID
+      parameters:
+      - description: Booking ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_leminhthai_train-ticket_booking-service_pkg_response.ResponseData'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_leminhthai_train-ticket_booking-service_pkg_response.ResponseData'
+      security:
+      - BearerAuth: []
+      summary: Chi tiết booking
+      tags:
+      - bookings
+  /bookings/hold:
+    post:
+      consumes:
+      - application/json
+      description: Giữ ghế trong 5 phút trước khi tạo booking
+      parameters:
+      - description: Hold Seat Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_leminhthai_train-ticket_booking-service_internal_model.HoldSeatRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_leminhthai_train-ticket_booking-service_pkg_response.ResponseData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_leminhthai_train-ticket_booking-service_pkg_response.ResponseData'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_leminhthai_train-ticket_booking-service_pkg_response.ResponseData'
+      security:
+      - BearerAuth: []
+      summary: Giữ ghế tạm thời
+      tags:
+      - bookings
+  /bookings/me:
+    get:
+      description: Lấy tất cả booking của user đang đăng nhập
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_leminhthai_train-ticket_booking-service_pkg_response.ResponseData'
+      security:
+      - BearerAuth: []
+      summary: Danh sách booking của tôi
+      tags:
+      - bookings
+  /payments:
+    post:
+      consumes:
+      - application/json
+      description: Thanh toán cho booking đang pending
+      parameters:
+      - description: Create Payment Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_leminhthai_train-ticket_booking-service_internal_model.CreatePaymentRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_leminhthai_train-ticket_booking-service_pkg_response.ResponseData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_leminhthai_train-ticket_booking-service_pkg_response.ResponseData'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_leminhthai_train-ticket_booking-service_pkg_response.ResponseData'
+      security:
+      - BearerAuth: []
+      summary: Thanh toán booking
+      tags:
+      - payments
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

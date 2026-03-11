@@ -70,7 +70,7 @@ services:
       retries: 10
     networks:
       - train-network
-  
+
   train-service:
     build: ./train-service
     container_name: train-service
@@ -83,7 +83,42 @@ services:
       CONFIG_NAME: docker
     networks:
       - train-network
-    
+
+  mysql-booking:
+    image: mysql:8.0
+    container_name: mysql-booking
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: booking_db
+      MYSQL_USER: app
+      MYSQL_PASSWORD: app123
+    ports:
+      - "3308:3306"
+    volumes:
+      - mysql_booking_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - train-network
+
+  booking-service:
+    build: ./booking-service
+    container_name: booking-service
+    ports:
+      - "8084:8084"
+    depends_on:
+      mysql-booking:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      CONFIG_NAME: docker
+    networks:
+      - train-network
+
 networks:
   train-network:
     driver: bridge
@@ -91,4 +126,5 @@ networks:
 volumes:
   mysql_user_data:
   mysql_train_data:
+  mysql_booking_data:
   redis_data:

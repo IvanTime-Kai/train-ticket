@@ -3,7 +3,10 @@ export
 
 MYSQL_DSN = $(MYSQL_USER):$(MYSQL_PASSWORD)@tcp($(MYSQL_HOST):$(MYSQL_PORT))/$(MYSQL_DBNAME)
 
-.PHONY: run build start wire migrate-up migrate-down migrate-status migrate-create
+.PHONY: run build start wire sqlgen migrate-up migrate-down migrate-status migrate-create
+
+sqlgen:
+	sqlc generate
 
 wire:
 	cd pkg/wire && wire

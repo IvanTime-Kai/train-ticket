@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Booking Service Architecture</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #080b14;
+    color: #e2e8f0;
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    padding: 40px 20px;
+  }
+
+  h1 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.3rem;
+    color: #f97316;
+    text-align: center;
+    margin-bottom: 6px;
+    letter-spacing: 2px;
+  }
+
+  .subtitle {
+    text-align: center;
+    color: #475569;
+    font-size: 0.8rem;
+    margin-bottom: 48px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .diagram { max-width: 1100px; margin: 0 auto; display: flex; flex-direction: column; gap: 28px; }
+
+  /* SECTION TITLE */
+  .section-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: #475569;
+    text-align: center;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: -12px;
+  }
+
+  /* DB SCHEMA */
+  .schema-card {
+    background: #0f1117;
+    border: 1px solid #1e293b;
+    border-radius: 16px;
+    padding: 28px;
+  }
+
+  .schema-title {
+    font-family: 'JetBrains Mono', monospace;
+    color: #f97316;
+    font-size: 0.95rem;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .schema-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  .table-card {
+    background: #1a1f2e;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #2d3748;
+  }
+
+  .table-header {
+    padding: 10px 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
+
+  .bookings-h  { background: #2e1e10; color: #fb923c; }
+  .booking-seats-h { background: #10182e; color: #60a5fa; }
+  .payments-h  { background: #0e2010; color: #4ade80; }
+
+  .table-fields {
+    padding: 10px 14px;
+    list-style: none;
+    font-size: 0.65rem;
+    line-height: 2;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .pk  { color: #f59e0b; }
+  .fk  { color: #60a5fa; }
+  .field { color: #94a3b8; }
+  .status-field { color: #a78bfa; }
+
+  /* FLOW SECTION */
+  .flow-card {
+    background: #0f1117;
+    border: 1px solid #1e293b;
+    border-radius: 16px;
+    padding: 28px;
+  }
+
+  .flow-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.95rem;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  /* FLOW STEPS */
+  .flows-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .flow-item {
+    background: #1a1f2e;
+    border-radius: 12px;
+    padding: 18px;
+    border-left: 3px solid;
+    position: relative;
+  }
+
+  .flow-item.hold    { border-color: #f59e0b; }
+  .flow-item.booking { border-color: #f97316; }
+  .flow-item.payment { border-color: #4ade80; }
+  .flow-item.cancel  { border-color: #ef4444; }
+
+  .flow-item-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+
+  .flow-item.hold    .flow-item-title { color: #f59e0b; }
+  .flow-item.booking .flow-item-title { color: #f97316; }
+  .flow-item.payment .flow-item-title { color: #4ade80; }
+  .flow-item.cancel  .flow-item-title { color: #ef4444; }
+
+  .steps { list-style: none; }
+  .step {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    margin-bottom: 8px;
+    font-size: 0.68rem;
+    color: #94a3b8;
+    font-family: 'JetBrains Mono', monospace;
+    line-height: 1.5;
+  }
+
+  .step-num {
+    background: #2d3748;
+    color: #60a5fa;
+    font-size: 0.58rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .step-redis { color: #fca5a5; }
+  .step-db    { color: #93c5fd; }
+  .step-kafka { color: #86efac; }
+  .step-grpc  { color: #fde047; }
+  .step-ok    { color: #6ee7b7; }
+  .step-err   { color: #fca5a5; }
+
+  /* REDIS KEYS */
+  .redis-card {
+    background: #0f1117;
+    border: 1px solid #1e293b;
+    border-radius: 16px;
+    padding: 28px;
+  }
+
+  .redis-title {
+    font-family: 'JetBrains Mono', monospace;
+    color: #ef4444;
+    font-size: 0.95rem;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .redis-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+
+  .redis-key {
+    background: #1a0f0f;
+    border: 1px dashed #ef4444;
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .redis-key-name { color: #fca5a5; font-size: 0.78rem; font-weight: 700; margin-bottom: 6px; }
+  .redis-key-value { color: #64748b; font-size: 0.65rem; line-height: 1.8; }
+
+  /* KAFKA */
+  .kafka-card {
+    background: #0f1117;
+    border: 1px solid #1e293b;
+    border-radius: 16px;
+    padding: 28px;
+  }
+
+  .kafka-title {
+    font-family: 'JetBrains Mono', monospace;
+    color: #84cc16;
+    font-size: 0.95rem;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .kafka-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+
+  .kafka-topic {
+    background: #0f1a10;
+    border: 1px dashed #84cc16;
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .kafka-topic-name { color: #bef264; font-size: 0.75rem; font-weight: 700; margin-bottom: 8px; }
+  .kafka-topic-pub  { color: #475569; font-size: 0.63rem; margin-bottom: 4px; }
+  .kafka-topic-pub span { color: #f97316; }
+  .kafka-topic-sub  { color: #475569; font-size: 0.63rem; }
+  .kafka-topic-sub span { color: #4ade80; }
+
+  /* STATUS FLOW */
+  .status-card {
+    background: #0f1117;
+    border: 1px solid #1e293b;
+    border-radius: 16px;
+    padding: 28px;
+  }
+
+  .status-title {
+    font-family: 'JetBrains Mono', monospace;
+    color: #a855f7;
+    font-size: 0.95rem;
+    margin-bottom: 24px;
+    text-align: center;
+  }
+
+  .status-flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    flex-wrap: wrap;
+  }
+
+  .status-box {
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-align: center;
+  }
+
+  .s-pending   { background: #1e1a2e; border: 1px solid #a855f7; color: #c084fc; }
+  .s-confirmed { background: #0e2010; border: 1px solid #22c55e; color: #4ade80; }
+  .s-cancelled { background: #2e0f0f; border: 1px solid #ef4444; color: #f87171; }
+  .s-expired   { background: #1a1a0f; border: 1px solid #eab308; color: #fde047; }
+
+  .status-arrow {
+    font-size: 1rem;
+    color: #475569;
+    padding: 0 10px;
+  }
+
+  .status-label {
+    font-size: 0.58rem;
+    color: #475569;
+    font-family: 'JetBrains Mono', monospace;
+    display: block;
+    text-align: center;
+    margin-top: 4px;
+  }
+
+  .status-col { display: flex; flex-direction: column; align-items: center; }
+
+  /* gRPC */
+  .grpc-card {
+    background: #0f1117;
+    border: 1px solid #1e293b;
+    border-radius: 16px;
+    padding: 28px;
+  }
+
+  .grpc-title {
+    font-family: 'JetBrains Mono', monospace;
+    color: #fde047;
+    font-size: 0.95rem;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .grpc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  .grpc-call {
+    background: #1a1a0f;
+    border: 1px dashed #eab308;
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .grpc-call-name  { color: #fde047; font-size: 0.75rem; font-weight: 700; margin-bottom: 6px; }
+  .grpc-call-desc  { color: #64748b; font-size: 0.63rem; line-height: 1.8; }
+</style>
+</head>
+<body>
+
+<h1>🎫 BOOKING SERVICE — ARCHITECTURE</h1>
+<p class="subtitle">// flow design & data model</p>
+
+<div class="diagram">
+
+  <!-- DB SCHEMA -->
+  <p class="section-title">── database schema ──</p>
+  <div class="schema-card">
+    <div class="schema-title">// booking_db — Tables</div>
+    <div class="schema-grid">
+
+      <div class="table-card">
+        <div class="table-header bookings-h">bookings</div>
+        <ul class="table-fields">
+          <li class="pk">id · CHAR(36) PK</li>
+          <li class="fk">user_id · CHAR(36)</li>
+          <li class="fk">trip_id · CHAR(36)</li>
+          <li class="field">total_price · DECIMAL</li>
+          <li class="status-field">status · TINYINT</li>
+          <li class="field">expires_at · DATETIME</li>
+          <li class="field">created_at · DATETIME</li>
+          <li class="field">updated_at · DATETIME</li>
+        </ul>
+      </div>
+
+      <div class="table-card">
+        <div class="table-header booking-seats-h">booking_seats</div>
+        <ul class="table-fields">
+          <li class="pk">id · CHAR(36) PK</li>
+          <li class="fk">booking_id · FK → bookings</li>
+          <li class="fk">seat_id · CHAR(36)</li>
+          <li class="fk">trip_id · CHAR(36)</li>
+          <li class="field">seat_number · VARCHAR</li>
+          <li class="field">class · VARCHAR</li>
+          <li class="field">price · DECIMAL</li>
+          <li class="field">created_at · DATETIME</li>
+        </ul>
+      </div>
+
+      <div class="table-card">
+        <div class="table-header payments-h">payments</div>
+        <ul class="table-fields">
+          <li class="pk">id · CHAR(36) PK</li>
+          <li class="fk">booking_id · FK → bookings</li>
+          <li class="field">amount · DECIMAL</li>
+          <li class="field">method · VARCHAR</li>
+          <li class="status-field">status · TINYINT</li>
+          <li class="field">paid_at · DATETIME</li>
+          <li class="field">created_at · DATETIME</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- STATUS FLOW -->
+  <p class="section-title">── booking status flow ──</p>
+  <div class="status-card">
+    <div class="status-title">// booking status transitions</div>
+    <div class="status-flow">
+      <div class="status-col">
+        <div class="status-box s-pending">PENDING (1)</div>
+        <span class="status-label">vừa tạo booking</span>
+      </div>
+      <div class="status-arrow">→</div>
+      <div class="status-col">
+        <div class="status-box s-confirmed">CONFIRMED (2)</div>
+        <span class="status-label">payment success</span>
+      </div>
+      <div style="width:40px"></div>
+      <div class="status-col">
+        <div class="status-box s-pending">PENDING (1)</div>
+        <span class="status-label">vừa tạo booking</span>
+      </div>
+      <div class="status-arrow">→</div>
+      <div class="status-col">
+        <div class="status-box s-cancelled">CANCELLED (0)</div>
+        <span class="status-label">user huỷ</span>
+      </div>
+      <div style="width:40px"></div>
+      <div class="status-col">
+        <div class="status-box s-pending">PENDING (1)</div>
+        <span class="status-label">vừa tạo booking</span>
+      </div>
+      <div class="status-arrow">→</div>
+      <div class="status-col">
+        <div class="status-box s-expired">EXPIRED (3)</div>
+        <span class="status-label">quá 15 phút chưa TT</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- FLOW -->
+  <p class="section-title">── api flow ──</p>
+  <div class="flow-card">
+    <div class="flow-title" style="color:#f97316">// end-to-end booking flow</div>
+    <div class="flows-grid">
+
+      <div class="flow-item hold">
+        <div class="flow-item-title">1. Hold Seat (giữ ghế)</div>
+        <ul class="steps">
+          <li class="step"><span class="step-num">01</span><span>POST /bookings/hold {trip_id, seat_ids[]}</span></li>
+          <li class="step"><span class="step-num">02</span><span class="step-grpc">gRPC → train-service: ValidateSeat(trip_id, seat_id)</span></li>
+          <li class="step"><span class="step-num">03</span><span class="step-ok">Ghế tồn tại & thuộc trip → OK</span></li>
+          <li class="step"><span class="step-num">04</span><span class="step-redis">Redis SET NX seat_hold:tripID:seatID → TTL 5 phút</span></li>
+          <li class="step"><span class="step-num">05</span><span class="step-err">Đã có người hold → reject "seat already held"</span></li>
+          <li class="step"><span class="step-num">06</span><span class="step-ok">Trả về hold_token (TTL 5 phút)</span></li>
+        </ul>
+      </div>
+
+      <div class="flow-item booking">
+        <div class="flow-item-title">2. Create Booking</div>
+        <ul class="steps">
+          <li class="step"><span class="step-num">01</span><span>POST /bookings {trip_id, seat_ids[], hold_token}</span></li>
+          <li class="step"><span class="step-num">02</span><span class="step-redis">Verify hold_token trong Redis còn không</span></li>
+          <li class="step"><span class="step-num">03</span><span class="step-err">Hết hạn → reject "hold expired"</span></li>
+          <li class="step"><span class="step-num">04</span><span class="step-grpc">gRPC → train-service: GetSeatPrice(seat_ids[])</span></li>
+          <li class="step"><span class="step-num">05</span><span class="step-db">Lưu booking (PENDING) + booking_seats vào DB</span></li>
+          <li class="step"><span class="step-num">06</span><span class="step-kafka">Kafka publish: booking.created</span></li>
+          <li class="step"><span class="step-num">07</span><span class="step-ok">Trả về booking info + payment URL</span></li>
+        </ul>
+      </div>
+
+      <div class="flow-item payment">
+        <div class="flow-item-title">3. Payment Success</div>
+        <ul class="steps">
+          <li class="step"><span class="step-num">01</span><span class="step-kafka">Kafka consume: payment.success</span></li>
+          <li class="step"><span class="step-num">02</span><span class="step-db">Update booking status → CONFIRMED</span></li>
+          <li class="step"><span class="step-num">03</span><span class="step-redis">Xoá seat_hold khỏi Redis</span></li>
+          <li class="step"><span class="step-num">04</span><span class="step-kafka">Kafka publish: booking.confirmed</span></li>
+          <li class="step"><span class="step-num">05</span><span class="step-ok">notification-service gửi email xác nhận</span></li>
+        </ul>
+      </div>
+
+      <div class="flow-item cancel">
+        <div class="flow-item-title">4. Cancel / Expire Booking</div>
+        <ul class="steps">
+          <li class="step"><span class="step-num">01</span><span>DELETE /bookings/:id (user cancel)</span></li>
+          <li class="step"><span class="step-num">02</span><span class="step-db">Update booking status → CANCELLED</span></li>
+          <li class="step"><span class="step-num">03</span><span class="step-redis">Xoá seat_hold khỏi Redis → ghế tự do</span></li>
+          <li class="step"><span class="step-num">04</span><span class="step-kafka">Kafka publish: booking.cancelled</span></li>
+          <li class="step"><span class="step-num">──</span><span style="color:#475569">── Auto expire ──</span></li>
+          <li class="step"><span class="step-num">05</span><span class="step-redis">Redis TTL hết → seat_hold tự xoá</span></li>
+          <li class="step"><span class="step-num">06</span><span class="step-db">Cron job → booking PENDING quá 15 phút → EXPIRED</span></li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- REDIS KEYS -->
+  <p class="section-title">── redis key design ──</p>
+  <div class="redis-card">
+    <div class="redis-title">// Redis Keys</div>
+    <div class="redis-grid">
+
+      <div class="redis-key">
+        <div class="redis-key-name">seat_hold:&lt;tripID&gt;:&lt;seatID&gt;</div>
+        <div class="redis-key-value">
+          value: userID<br>
+          TTL: 5 phút<br>
+          dùng: SET NX (chỉ set nếu chưa có)<br>
+          → Tránh 2 người hold cùng ghế
+        </div>
+      </div>
+
+      <div class="redis-key">
+        <div class="redis-key-name">hold_token:&lt;token&gt;</div>
+        <div class="redis-key-value">
+          value: {userID, tripID, seatIDs[]}<br>
+          TTL: 5 phút<br>
+          dùng: verify khi tạo booking<br>
+          → Đảm bảo user đã hold ghế trước
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- KAFKA TOPICS -->
+  <p class="section-title">── kafka topics ──</p>
+  <div class="kafka-card">
+    <div class="kafka-title">// Event-Driven Communication</div>
+    <div class="kafka-grid">
+
+      <div class="kafka-topic">
+        <div class="kafka-topic-name">booking.created</div>
+        <div class="kafka-topic-pub">publisher: <span>booking-service</span></div>
+        <div class="kafka-topic-sub">subscriber: <span>payment-service</span></div>
+      </div>
+
+      <div class="kafka-topic">
+        <div class="kafka-topic-name">payment.success</div>
+        <div class="kafka-topic-pub">publisher: <span>payment-service</span></div>
+        <div class="kafka-topic-sub">subscriber: <span>booking-service</span></div>
+      </div>
+
+      <div class="kafka-topic">
+        <div class="kafka-topic-name">booking.confirmed</div>
+        <div class="kafka-topic-pub">publisher: <span>booking-service</span></div>
+        <div class="kafka-topic-sub">subscriber: <span>notification-service</span></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- gRPC CALLS -->
+  <p class="section-title">── grpc internal calls ──</p>
+  <div class="grpc-card">
+    <div class="grpc-title">// booking-service → train-service</div>
+    <div class="grpc-grid">
+
+      <div class="grpc-call">
+        <div class="grpc-call-name">ValidateSeat(trip_id, seat_id)</div>
+        <div class="grpc-call-desc">
+          Kiểm tra ghế tồn tại và thuộc chuyến tàu đó<br>
+          → Gọi khi: Hold seat<br>
+          → Trả về: bool valid + seat info
+        </div>
+      </div>
+
+      <div class="grpc-call">
+        <div class="grpc-call-name">GetSeatPrice(seat_ids[])</div>
+        <div class="grpc-call-desc">
+          Lấy giá ghế để tính tổng tiền booking<br>
+          → Gọi khi: Create booking<br>
+          → Trả về: []SeatPrice
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

@@ -24,3 +24,9 @@
 {"level":"INFO","time":"2026-03-06T14:38:53.140+0700","caller":"initialize/mysql.go:30","msg":"Init MySql Successfully!!!"}
 {"level":"INFO","time":"2026-03-06T14:40:35.306+0700","caller":"initialize/run.go:13","msg":"Init Logger Successfully!","ok":"success"}
 {"level":"INFO","time":"2026-03-06T14:40:35.307+0700","caller":"initialize/mysql.go:30","msg":"Init MySql Successfully!!!"}
+{"level":"INFO","time":"2026-03-09T09:47:02.870+0700","caller":"initialize/run.go:13","msg":"Init Logger Successfully!","ok":"success"}
+{"level":"INFO","time":"2026-03-09T09:47:02.870+0700","caller":"initialize/mysql.go:30","msg":"Init MySql Successfully!!!"}
+{"level":"INFO","time":"2026-03-11T13:57:14.096+0700","caller":"initialize/run.go:13","msg":"Init Logger Successfully!","ok":"success"}
+{"level":"INFO","time":"2026-03-11T13:57:14.098+0700","caller":"initialize/mysql.go:30","msg":"Init MySql Successfully!!!"}
+{"level":"INFO","time":"2026-03-11T14:03:19.790+0700","caller":"initialize/run.go:13","msg":"Init Logger Successfully!","ok":"success"}
+{"level":"INFO","time":"2026-03-11T14:03:19.790+0700","caller":"initialize/mysql.go:30","msg":"Init MySql Successfully!!!"}

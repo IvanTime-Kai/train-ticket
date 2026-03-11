@@ -1,0 +1,17 @@
+{"level":"INFO","time":"2026-03-11T13:56:07.303+0700","caller":"initialize/run.go:13","msg":"Init Logger Successfully!","ok":"success"}
+{"level":"INFO","time":"2026-03-11T13:56:07.304+0700","caller":"initialize/mysql.go:30","msg":"Init MySql Successfully!!!"}
+{"level":"INFO","time":"2026-03-11T13:56:52.600+0700","caller":"initialize/run.go:13","msg":"Init Logger Successfully!","ok":"success"}
+{"level":"INFO","time":"2026-03-11T13:56:52.601+0700","caller":"initialize/mysql.go:30","msg":"Init MySql Successfully!!!"}
+{"level":"INFO","time":"2026-03-11T13:56:52.625+0700","caller":"initialize/redis.go:27","msg":"Init Redis Successfully!!!"}
+{"level":"INFO","time":"2026-03-11T13:58:50.329+0700","caller":"initialize/run.go:13","msg":"Init Logger Successfully!","ok":"success"}
+{"level":"INFO","time":"2026-03-11T13:58:50.329+0700","caller":"initialize/mysql.go:30","msg":"Init MySql Successfully!!!"}
+{"level":"INFO","time":"2026-03-11T13:58:50.341+0700","caller":"initialize/redis.go:27","msg":"Init Redis Successfully!!!"}
+{"level":"INFO","time":"2026-03-11T13:59:45.976+0700","caller":"initialize/run.go:13","msg":"Init Logger Successfully!","ok":"success"}
+{"level":"INFO","time":"2026-03-11T13:59:45.977+0700","caller":"initialize/mysql.go:30","msg":"Init MySql Successfully!!!"}
+{"level":"INFO","time":"2026-03-11T13:59:45.992+0700","caller":"initialize/redis.go:27","msg":"Init Redis Successfully!!!"}
+{"level":"INFO","time":"2026-03-11T14:03:04.991+0700","caller":"initialize/run.go:13","msg":"Init Logger Successfully!","ok":"success"}
+{"level":"INFO","time":"2026-03-11T14:03:04.991+0700","caller":"initialize/mysql.go:30","msg":"Init MySql Successfully!!!"}
+{"level":"INFO","time":"2026-03-11T14:03:04.997+0700","caller":"initialize/redis.go:27","msg":"Init Redis Successfully!!!"}
+{"level":"INFO","time":"2026-03-11T14:22:00.100+0700","caller":"initialize/run.go:13","msg":"Init Logger Successfully!","ok":"success"}
+{"level":"INFO","time":"2026-03-11T14:22:00.100+0700","caller":"initialize/mysql.go:30","msg":"Init MySql Successfully!!!"}
+{"level":"INFO","time":"2026-03-11T14:22:00.113+0700","caller":"initialize/redis.go:27","msg":"Init Redis Successfully!!!"}

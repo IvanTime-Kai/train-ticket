@@ -1,0 +1,26 @@
+logger:
+  log_level: debug
+  file_log_name: "./storages/logs/dev.001.log"
+  max_size: 500
+  max_backups: 3
+  max_age: 28
+  compress: true
+mysql:
+  host: localhost
+  port: 3308
+  username: app
+  password: app123
+  dbName: booking_db
+  maxIdleConns: 10
+  maxOpenConns: 100
+  connMaxLifeTime: 3600
+server:
+  port: 8084
+  mode: "dev"
+redis:
+  host: localhost
+  port: 6381
+  password: ""
+  db: 1                  # ← dùng db 1 thay vì 0 (user-service dùng db 0)
+grpc:
+  train_service: "localhost:9002"

@@ -3,7 +3,10 @@ export
 
 MYSQL_DSN = $(MYSQL_USER):$(MYSQL_PASSWORD)@tcp($(MYSQL_HOST):$(MYSQL_PORT))/$(MYSQL_DBNAME)
 
-.PHONY: run wire swag build start migrate-up migrate-down migrate-status migrate-create
+.PHONY: run wire swag build start sqlgen migrate-up migrate-down migrate-status migrate-create
+
+sqlgen:
+	sqlc generate
 
 run:
 	go run ./cmd/server/main.go
@@ -12,10 +15,10 @@ wire:
 	cd pkg/wire && wire
 
 swag:
-	swag init -g cmd/server/main.go --parseDependency --parseInternal
+	swag init -g cmd/server/main.go --parseDependency --parseInternal --quiet
 
 build:
-	go build -o bin/user-service ./cmd/server/main.go
+	go build -o bin/train-service ./cmd/server/main.go
 
 start: build
 	./bin/train-service

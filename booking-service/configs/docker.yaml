@@ -1,0 +1,26 @@
+logger:
+  log_level: info
+  file_log_name: "./storages/logs/prod.001.log"
+  max_size: 500
+  max_backups: 3
+  max_age: 28
+  compress: true
+mysql:
+  host: mysql-booking
+  port: 3306
+  username: app
+  password: app123
+  dbName: booking_db
+  maxIdleConns: 10
+  maxOpenConns: 100
+  connMaxLifeTime: 3600
+server:
+  port: 8084
+  mode: "release"
+redis:
+  host: redis
+  port: 6379
+  password: ""
+  db: 1
+grpc:
+  train_service: "train-service:9002"
