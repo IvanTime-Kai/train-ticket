@@ -17,6 +17,8 @@ const (
 	prefixSeatHold  = "seat_hold:%s:%s" // seat_hold:<tripID>:<seatID>
 	prefixHoldToken = "hold_token:%s"   // hold_token:<token>
 	holdTTL         = 5 * time.Minute
+
+	prefixBlacklist    = "blacklist:%s"     // blacklist:<jti>
 )
 
 // ─────────────────────────────────────────
@@ -277,4 +279,13 @@ func ExtendMultipleSeatsIfOwner(ctx context.Context, tripID string, seatIDs []st
 	}
 
 	return nil
+}
+
+func IsTokenBlacklisted(ctx context.Context, jti string) (bool, error) {
+	key := fmt.Sprintf(prefixBlacklist, jti)
+	val, err := global.Rdb.Exists(ctx, key).Result()
+	if err != nil {
+		return false, err
+	}
+	return val > 0, nil
 }

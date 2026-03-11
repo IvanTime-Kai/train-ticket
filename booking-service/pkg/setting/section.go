@@ -6,15 +6,16 @@ type Settings struct {
 	Server ServerSetting `mapstructure:"server"`
 	Redis  RedisSetting  `mapstructure:"redis"`
 	GRPC   GRPCSetting   `mapstructure:"grpc"`
+	JWT    JWTSetting    `mapstructure:"jwt"`
 }
 
 type LoggerSetting struct {
-	LogLevel     string `mapstructure:"log_level"`
+	LogLevel    string `mapstructure:"log_level"`
 	FileLogName string `mapstructure:"file_log_name"`
-	MaxSize      int    `mapstructure:"max_size"`
-	MaxBackups   int    `mapstructure:"max_backups"`
-	MaxAge       int    `mapstructure:"max_age"`
-	Compress      bool   `mapstructure:"compress"`
+	MaxSize     int    `mapstructure:"max_size"`
+	MaxBackups  int    `mapstructure:"max_backups"`
+	MaxAge      int    `mapstructure:"max_age"`
+	Compress    bool   `mapstructure:"compress"`
 }
 
 type MySqlSetting struct {
@@ -42,4 +43,12 @@ type RedisSetting struct {
 
 type GRPCSetting struct {
 	TrainService string `mapstructure:"train_service"`
+}
+
+type JWTSetting struct {
+	TOKEN_HOUR_LIFESPAN int    `mapstructure:"TOKEN_HOUR_LIFESPAN"`
+	JWT_EXPIRATION      string `mapstructure:"JWT_EXPIRATION"`
+	API_SECRET          string `mapstructure:"API_SECRET"`
+	ACCESS_TOKEN_TTL    int    `mapstructure:"ACCESS_TOKEN_TTL"`
+	REFRESH_TOKEN_TTL   int    `mapstructure:"REFRESH_TOKEN_TTL"`
 }

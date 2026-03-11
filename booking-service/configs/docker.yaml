@@ -1,3 +1,9 @@
+jwt:
+  TOKEN_HOUR_LIFESPAN: 1
+  JWT_EXPIRATION: 1h
+  API_SECRET: "xxx.yyy.zzz"
+  access_token_ttl: 15
+  refresh_token_ttl: 10080
 logger:
   log_level: info
   file_log_name: "./storages/logs/prod.001.log"

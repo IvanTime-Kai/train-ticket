@@ -5,8 +5,10 @@ import (
 	"fmt"
 
 	db "github.com/leminhthai/train-ticket/train-service/db/generated"
+	"github.com/leminhthai/train-ticket/train-service/global"
 	"github.com/leminhthai/train-ticket/train-service/internal/model"
 	"github.com/leminhthai/train-ticket/train-service/internal/repository"
+	"go.uber.org/zap"
 )
 
 type StationService interface {
@@ -52,5 +54,6 @@ func (ss *stationService) GetByCode(ctx context.Context, code string) (db.Statio
 }
 
 func (ss *stationService) List(ctx context.Context) ([]db.Station, error) {
+	global.Logger.Info("Logger!", zap.String("ok", "success"))
 	return ss.repo.List(ctx)
 }

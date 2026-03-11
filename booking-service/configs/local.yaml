@@ -1,3 +1,9 @@
+jwt:
+  TOKEN_HOUR_LIFESPAN: 1
+  JWT_EXPIRATION: 1h
+  API_SECRET: "xxx.yyy.zzz"
+  ACCESS_TOKEN_TTL: 15      # 15 phút
+  REFRESH_TOKEN_TTL: 10080  # 7 ngày = 7 * 24 * 60
 logger:
   log_level: debug
   file_log_name: "./storages/logs/dev.001.log"
