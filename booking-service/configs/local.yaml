@@ -29,4 +29,5 @@ redis:
   password: ""
   db: 1                  # ← dùng db 1 thay vì 0 (user-service dùng db 0)
 grpc:
-  train_service: "localhost:9002"
+  train_service_host: localhost
+  train_service_port: 9002

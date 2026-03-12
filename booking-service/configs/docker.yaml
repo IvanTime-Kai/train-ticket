@@ -29,4 +29,5 @@ redis:
   password: ""
   db: 1
 grpc:
-  train_service: "train-service:9002"
+  train_service_host: train-service
+  train_service_port: 9002

@@ -10,7 +10,6 @@ import (
 
 var (
 	Config setting.Settings
-
 	Logger *logger.LoggerZap
 	Mdb    *sql.DB
 	Rdb    *redis.Client

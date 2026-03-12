@@ -14,7 +14,6 @@ func Run() *gin.Engine {
 
 	InitMySql()
 	InitRedis()
-
 	InitServices()
 	r := InitRouter()
 

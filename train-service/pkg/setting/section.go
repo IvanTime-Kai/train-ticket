@@ -4,6 +4,7 @@ type Settings struct {
 	Server ServerSetting `mapstructure:"server"`
 	Logger LoggerSetting `mapstructure:"logger"`
 	MySql  MySqlSetting  `mapstructure:"mysql"`
+	GRPC   GRPCSetting   `mapstructure:"grpc"`
 }
 
 type LoggerSetting struct {
@@ -29,4 +30,8 @@ type MySqlSetting struct {
 type ServerSetting struct {
 	Port int    `mapstructure:"port"`
 	Mode string `mapstructure:"mode"`
+}
+
+type GRPCSetting struct {
+	Port int `mapstructure:"port"`
 }

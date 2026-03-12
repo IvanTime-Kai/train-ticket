@@ -42,7 +42,8 @@ type RedisSetting struct {
 }
 
 type GRPCSetting struct {
-	TrainService string `mapstructure:"train_service"`
+	TrainServiceHost string `mapstructure:"train_service_host"`
+	TrainServicePort int    `mapstructure:"train_service_port"`
 }
 
 type JWTSetting struct {

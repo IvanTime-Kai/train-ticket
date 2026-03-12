@@ -14,6 +14,9 @@ import (
 	"github.com/leminhthai/train-ticket/booking-service/internal/repository"
 	"github.com/leminhthai/train-ticket/booking-service/internal/utils/cache"
 	timeFormat "github.com/leminhthai/train-ticket/booking-service/internal/utils/time"
+
+	grpcClient "github.com/leminhthai/train-ticket/booking-service/internal/grpc"
+	proto "github.com/IvanTime-Kai/train-ticket-proto/gen/train"
 )
 
 type BookingService interface {
@@ -26,10 +29,11 @@ type BookingService interface {
 
 type bookingService struct {
 	bookingRepo repository.BookingRepository
+	trainClient *grpcClient.TrainClient
 }
 
-func NewBookingService(bookingRepo repository.BookingRepository) BookingService {
-	return &bookingService{bookingRepo: bookingRepo}
+func NewBookingService(bookingRepo repository.BookingRepository, trainClient *grpcClient.TrainClient) BookingService {
+	return &bookingService{bookingRepo: bookingRepo, trainClient: trainClient}
 }
 
 // ─────────────────────────────────────────
@@ -37,7 +41,14 @@ func NewBookingService(bookingRepo repository.BookingRepository) BookingService 
 // ─────────────────────────────────────────
 
 func (s *bookingService) HoldSeat(ctx context.Context, userID string, req *model.HoldSeatRequest) (*model.HoldSeatResponse, error) {
-	// Check DB trước — UX tốt hơn
+	// 1. Validate seats qua gRPC TRƯỚC — không tốn Redis nếu seat invalid
+	protoSeats, err := s.trainClient.ValidateSeats(ctx, req.TripID, req.SeatIDs)
+	if err != nil {
+		return nil, err
+	}
+	seats := protoSeatsToModel(protoSeats)
+
+	// 2. Check DB
 	bookedSeatIDs, err := s.bookingRepo.AreSeatsBooked(ctx, req.TripID, req.SeatIDs)
 	if err != nil {
 		return nil, err
@@ -46,30 +57,18 @@ func (s *bookingService) HoldSeat(ctx context.Context, userID string, req *model
 		return nil, fmt.Errorf("seats already booked: %v", bookedSeatIDs)
 	}
 
-	// Hold tất cả ghế atomic bằng Lua — check all free + set all
+	// 3. Hold Redis atomic
 	if err := cache.HoldMultipleSeatsAtomic(ctx, req.TripID, req.SeatIDs, userID); err != nil {
 		return nil, err
 	}
 
-	// Tạo hold token
+	// 4. Lưu token
 	token, err := cache.SaveHoldToken(ctx, userID, req.TripID, req.SeatIDs)
 	if err != nil {
-		// Fix bug: dùng req.SeatIDs thay vì heldSeats (không còn tồn tại)
 		for _, seatID := range req.SeatIDs {
 			_ = cache.ReleaseSeatIfOwner(ctx, req.TripID, seatID, userID)
 		}
 		return nil, err
-	}
-
-	// TODO: mock — replace bằng gRPC sau
-	seats := make([]model.SeatInfo, 0, len(req.SeatIDs))
-	for _, seatID := range req.SeatIDs {
-		seats = append(seats, model.SeatInfo{
-			SeatID:     seatID,
-			SeatNumber: seatID,
-			Class:      "economy",
-			Price:      150000,
-		})
 	}
 
 	return &model.HoldSeatResponse{
@@ -117,18 +116,15 @@ func (s *bookingService) CreateBooking(ctx context.Context, userID string, req *
 		return nil, err
 	}
 
-	// TODO: mock — replace bằng gRPC sau
-	seats := make([]model.SeatInfo, 0, len(req.SeatIDs))
+	// Validate seats + lấy thông tin thật từ train-service qua gRPC
+	protoSeats, err := s.trainClient.ValidateSeats(ctx, req.TripID, req.SeatIDs)
+	if err != nil {
+		return nil, err
+	}
+	seats := protoSeatsToModel(protoSeats)
 	totalPrice := 0.0
-	for _, seatID := range req.SeatIDs {
-		seat := model.SeatInfo{
-			SeatID:     seatID,
-			SeatNumber: seatID,
-			Class:      "economy",
-			Price:      150000,
-		}
-		seats = append(seats, seat)
-		totalPrice += seat.Price
+	for i := range seats {
+		totalPrice += seats[i].Price
 	}
 
 	bookingID := uuid.New().String()
@@ -284,4 +280,20 @@ func isDuplicateError(err error) bool {
 		return mysqlErr.Number == 1062 // MySQL duplicate entry
 	}
 	return false
+}
+
+func protoSeatsToModel(seats []*proto.SeatInfo) []model.SeatInfo {
+	out := make([]model.SeatInfo, 0, len(seats))
+	for _, s := range seats {
+		if s == nil {
+			continue
+		}
+		out = append(out, model.SeatInfo{
+			SeatID:     s.SeatId,
+			SeatNumber: s.SeatNumber,
+			Class:      s.Class,
+			Price:      s.Price,
+		})
+	}
+	return out
 }

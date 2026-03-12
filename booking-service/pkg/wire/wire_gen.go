@@ -9,27 +9,37 @@ package wire
 import (
 	"database/sql"
 	"github.com/google/wire"
+	"github.com/leminhthai/train-ticket/booking-service/internal/grpc"
 	"github.com/leminhthai/train-ticket/booking-service/internal/repository"
 	"github.com/leminhthai/train-ticket/booking-service/internal/service"
+	"github.com/leminhthai/train-ticket/booking-service/pkg/setting"
 )
 
 // Injectors from wire.go:
 
-func InitializeApp(sqlDB *sql.DB) *App {
+func InitializeApp(sqlDB *sql.DB, grpcCfg setting.GRPCSetting) (*App, error) {
 	queries := ProvideQueries(sqlDB)
 	bookingRepository := repository.NewBookingRepository(sqlDB, queries)
-	bookingService := service.NewBookingService(bookingRepository)
+	trainClient, err := ProvideTrainClient(grpcCfg)
+	if err != nil {
+		return nil, err
+	}
+	bookingService := service.NewBookingService(bookingRepository, trainClient)
 	paymentRepository := repository.NewPaymentRepository(sqlDB, queries)
 	paymentService := service.NewPaymentService(bookingRepository, paymentRepository)
 	app := &App{
 		BookingService: bookingService,
 		PaymentService: paymentService,
 	}
-	return app
+	return app, nil
 }
 
 // wire.go:
 
-var BookingSet = wire.NewSet(repository.NewBookingRepository, service.NewBookingService)
+var BookingSet = wire.NewSet(repository.NewBookingRepository, service.NewBookingService, ProvideTrainClient)
 
 var PaymentSet = wire.NewSet(repository.NewPaymentRepository, service.NewPaymentService)
+
+func ProvideTrainClient(cfg setting.GRPCSetting) (*grpc.TrainClient, error) {
+	return grpc.NewTrainClient(cfg.TrainServiceHost, cfg.TrainServicePort)
+}

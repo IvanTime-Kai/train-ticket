@@ -17,3 +17,5 @@ mysql:
 server:
   port: 8083
   mode: "dev"
+grpc:
+  port: 9002

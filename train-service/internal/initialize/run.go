@@ -13,6 +13,7 @@ func Run() *gin.Engine {
 	global.Logger.Info("Init Logger Successfully!", zap.String("ok", "success"))
 
 	InitMySql()
+	InitGRPC()
 	InitServices()
 	r := InitRouter()
 
