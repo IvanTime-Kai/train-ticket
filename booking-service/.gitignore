@@ -1,0 +1,28 @@
+# Binary build output (Makefile build -> bin/user-service)
+bin/
+
+# Secrets & local config
+.env
+.env.*
+.env.local
+configs/local.yaml
+
+# Logs
+storages/
+*.log
+
+# Go
+vendor/
+*.test
+*.out
+go.work
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+
+# Debug
+__debug_bin
