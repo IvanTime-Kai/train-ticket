@@ -50,6 +50,7 @@ type BookingRepository interface {
 	GetBookedSeatsByTripID(ctx context.Context, tripId string) ([]db.GetBookedSeatsByTripIDRow, error)
 	IsSeatBooked(ctx context.Context, tripID, seatID string) (bool, error)
 	AreSeatsBooked(ctx context.Context, tripID string, seatIDs []string) ([]string, error)
+	BulkUpdateExpiredBookings(ctx context.Context) error
 }
 
 type bookingRepository struct {
@@ -228,4 +229,8 @@ func (r *bookingRepository) AreSeatsBooked(ctx context.Context, tripID string, s
 	}
 
 	return booked, nil
+}
+
+func (br *bookingRepository) BulkUpdateExpiredBookings(ctx context.Context) error {
+	return br.BulkUpdateExpiredBookings(ctx)
 }

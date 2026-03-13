@@ -25,10 +25,10 @@ type BookingSeat struct {
 	BookingID  string    `json:"booking_id"`
 	SeatID     string    `json:"seat_id"`
 	TripID     string    `json:"trip_id"`
-	SeatNumber string    `json:"seat_number"`
 	Class      string    `json:"class"`
 	Price      string    `json:"price"`
 	CreatedAt  time.Time `json:"created_at"`
+	SeatNumber string    `json:"seat_number"`
 }
 
 type Payment struct {

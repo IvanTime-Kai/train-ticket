@@ -28,8 +28,9 @@ func InitializeApp(sqlDB *sql.DB, grpcCfg setting.GRPCSetting) (*App, error) {
 	paymentRepository := repository.NewPaymentRepository(sqlDB, queries)
 	paymentService := service.NewPaymentService(bookingRepository, paymentRepository)
 	app := &App{
-		BookingService: bookingService,
-		PaymentService: paymentService,
+		BookingService:    bookingService,
+		PaymentService:    paymentService,
+		BookingRepository: bookingRepository,
 	}
 	return app, nil
 }

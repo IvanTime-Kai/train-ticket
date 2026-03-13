@@ -15,8 +15,8 @@ import (
 	"github.com/leminhthai/train-ticket/booking-service/internal/utils/cache"
 	timeFormat "github.com/leminhthai/train-ticket/booking-service/internal/utils/time"
 
-	grpcClient "github.com/leminhthai/train-ticket/booking-service/internal/grpc"
 	proto "github.com/IvanTime-Kai/train-ticket-proto/gen/train"
+	grpcClient "github.com/leminhthai/train-ticket/booking-service/internal/grpc"
 )
 
 type BookingService interface {
@@ -25,6 +25,7 @@ type BookingService interface {
 	GetBookingByID(ctx context.Context, userID, bookingID string) (*model.BookingResponse, error)
 	GetMyBookings(ctx context.Context, userID string) ([]model.BookingResponse, error)
 	CancelBooking(ctx context.Context, userID, bookingID string) error
+	ExpireBookings(ctx context.Context) (int, error)
 }
 
 type bookingService struct {
@@ -234,6 +235,23 @@ func (s *bookingService) CancelBooking(ctx context.Context, userID, bookingID st
 	// Seat availability dựa vào booking_seats table
 	// Redis hold đã bị xoá sau CreateBooking
 	return s.bookingRepo.UpdateBookingStatus(ctx, bookingID, int8(model.BookingStatusCancelled))
+}
+
+func (s *bookingService) ExpireBookings(ctx context.Context) (int, error) {
+	expired, err := s.bookingRepo.GetExpiredBookings(ctx)
+
+	if err != nil {
+		return 0, fmt.Errorf("get expired bookings: %w", err)
+	}
+
+	if len(expired) == 0 {
+		return 0, nil
+	}
+
+	if err := s.bookingRepo.BulkUpdateExpiredBookings(ctx); err != nil {
+		return 0, fmt.Errorf("bulk update expired bookings: %w", err)
+	}
+	return len(expired), nil
 }
 
 // ─────────────────────────────────────────

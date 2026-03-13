@@ -50,3 +50,9 @@ FOR UPDATE;
 SELECT (expires_at < NOW()) AS expired
 FROM bookings
 WHERE id = ? LIMIT 1;
+
+-- name: BulkUpdateExpiredBookings :exec
+UPDATE bookings
+SET status = 3, updated_at = NOW()
+WHERE status = 1
+AND expires_at < NOW();

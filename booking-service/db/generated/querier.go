@@ -9,6 +9,7 @@ import (
 )
 
 type Querier interface {
+	BulkUpdateExpiredBookings(ctx context.Context) error
 	CreateBooking(ctx context.Context, arg CreateBookingParams) error
 	CreateBookingSeat(ctx context.Context, arg CreateBookingSeatParams) error
 	CreatePayment(ctx context.Context, arg CreatePaymentParams) error

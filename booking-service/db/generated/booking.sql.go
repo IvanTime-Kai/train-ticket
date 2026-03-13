@@ -10,6 +10,18 @@ import (
 	"time"
 )
 
+const bulkUpdateExpiredBookings = `-- name: BulkUpdateExpiredBookings :exec
+UPDATE bookings
+SET status = 3, updated_at = NOW()
+WHERE status = 1
+AND expires_at < NOW()
+`
+
+func (q *Queries) BulkUpdateExpiredBookings(ctx context.Context) error {
+	_, err := q.db.ExecContext(ctx, bulkUpdateExpiredBookings)
+	return err
+}
+
 const createBooking = `-- name: CreateBooking :exec
 INSERT INTO bookings (id, user_id, trip_id, total_price, status, expires_at)
 VALUES (?, ?, ?, ?, ?, ?)
@@ -65,7 +77,7 @@ func (q *Queries) CreateBookingSeat(ctx context.Context, arg CreateBookingSeatPa
 }
 
 const getBookedSeatsByTripID = `-- name: GetBookedSeatsByTripID :many
-SELECT bs.id, booking_id, seat_id, bs.trip_id, seat_number, class, price, bs.created_at, b.id, user_id, b.trip_id, total_price, status, expires_at, b.created_at, updated_at FROM booking_seats bs
+SELECT bs.id, booking_id, seat_id, bs.trip_id, class, price, bs.created_at, seat_number, b.id, user_id, b.trip_id, total_price, status, expires_at, b.created_at, updated_at FROM booking_seats bs
 JOIN bookings b ON bs.booking_id = b.id
 WHERE bs.trip_id = ?
 AND b.status IN (1, 2)
@@ -76,10 +88,10 @@ type GetBookedSeatsByTripIDRow struct {
 	BookingID   string    `json:"booking_id"`
 	SeatID      string    `json:"seat_id"`
 	TripID      string    `json:"trip_id"`
-	SeatNumber  string    `json:"seat_number"`
 	Class       string    `json:"class"`
 	Price       string    `json:"price"`
 	CreatedAt   time.Time `json:"created_at"`
+	SeatNumber  string    `json:"seat_number"`
 	ID_2        string    `json:"id_2"`
 	UserID      string    `json:"user_id"`
 	TripID_2    string    `json:"trip_id_2"`
@@ -104,10 +116,10 @@ func (q *Queries) GetBookedSeatsByTripID(ctx context.Context, tripID string) ([]
 			&i.BookingID,
 			&i.SeatID,
 			&i.TripID,
-			&i.SeatNumber,
 			&i.Class,
 			&i.Price,
 			&i.CreatedAt,
+			&i.SeatNumber,
 			&i.ID_2,
 			&i.UserID,
 			&i.TripID_2,
@@ -206,7 +218,7 @@ func (q *Queries) GetBookingByIDForUpdate(ctx context.Context, id string) (Booki
 }
 
 const getBookingSeatsByBookingID = `-- name: GetBookingSeatsByBookingID :many
-SELECT id, booking_id, seat_id, trip_id, seat_number, class, price, created_at FROM booking_seats
+SELECT id, booking_id, seat_id, trip_id, class, price, created_at, seat_number FROM booking_seats
 WHERE booking_id = ?
 `
 
@@ -224,10 +236,10 @@ func (q *Queries) GetBookingSeatsByBookingID(ctx context.Context, bookingID stri
 			&i.BookingID,
 			&i.SeatID,
 			&i.TripID,
-			&i.SeatNumber,
 			&i.Class,
 			&i.Price,
 			&i.CreatedAt,
+			&i.SeatNumber,
 		); err != nil {
 			return nil, err
 		}
